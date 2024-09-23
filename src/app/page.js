@@ -1,4 +1,4 @@
-import Layout from "./components/layout"
+import Layout from "../Components/layout"
 import FooterBar from "./elemets/footerbar"
 import Farm from "./farm/page"
 import css from "./mainpage.css"

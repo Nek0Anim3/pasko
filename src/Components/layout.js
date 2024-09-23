@@ -1,4 +1,4 @@
-import FooterBar from '../elemets/footerbar';
+import FooterBar from '../app/elemets/footerbar';
 
 export default function Layout({ children }) {
   return (
@@ -10,3 +10,4 @@ export default function Layout({ children }) {
     </>
   );
 }
+//TODO wtf is it???!!!?#!?#!@.3
