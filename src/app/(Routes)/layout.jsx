@@ -4,6 +4,7 @@ import { getUserData } from "@/src/utils/getUserData";
 
 
 export default function Layout({ children }) {
+  
   getUserData
 
   return (
