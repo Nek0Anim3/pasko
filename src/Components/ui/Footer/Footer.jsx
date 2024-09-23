@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 export default function FooterBar() {
   return (
-    <main>
-      <div className={styles.footerContainer}>
+    <footer>
+      <nav className={styles.footerContainer}>
         <Link href="/upgrade" passHref>
           <button className={style.footerButton}>
             <Image src={'/upgrade.png'} width={40} height={40} alt="Upgrade Icon" />
@@ -35,8 +35,7 @@ export default function FooterBar() {
             <Image src={'/tasks.png'} width={40} height={40} alt="Task Icon" />
           </button>
         </Link>
-      </div>
-    </main>
-
+      </nav>
+    </footer>
   );
 }
