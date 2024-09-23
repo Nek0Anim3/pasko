@@ -4,8 +4,8 @@ export default function Farm() {
   return  (
     <main>
       <div className={styles.clickerContent}>
-        
         <div className="clicker-container"></div>
+        {typeof window}
       </div>
     </main>
   )
