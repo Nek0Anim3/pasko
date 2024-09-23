@@ -6,12 +6,13 @@ export const getUserData = () => {
 
     // Проверка, что приложение запущено в Telegram
     if (!initDataRaw) {
+      
       throw new Error('Not in Telegram');
     }
 
     // Возвращаем данные пользователя
     return {
-      username: initData.user?.username, /*
+      username: initData, /*
       first_name: initData.user?.first_name,
       last_name: initData.user?.last_name,*/
     };
