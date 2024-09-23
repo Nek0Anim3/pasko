@@ -5,9 +5,9 @@ export default function Upgrade() {
     return(
 
         <div className="container">
-        <div className="cont-main">
-            <h1>GOOOOOOL</h1>
-        </div>
+            <div className="cont-main">
+                <h1>GOOOOOOL</h1>
+            </div>
         </div>
 
     )
