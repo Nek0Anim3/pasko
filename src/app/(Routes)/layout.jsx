@@ -5,13 +5,15 @@ import { getUserData } from "@/src/utils/getUserData";
 
 export default function Layout({ children }) {
 
-  console.log(getUserData().username)
+  let username = getUserData().username
 
   return (
     <>
       <Header />
       <div className="content">
         {children}
+
+        {username}
       </div>
       <Footer />
     </>
