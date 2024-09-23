@@ -12,16 +12,12 @@ export const getUserData = () => {
 
     // Возвращаем данные пользователя
     return {
-      username: initData, /*
-      first_name: initData.user?.first_name,
-      last_name: initData.user?.last_name,*/
+      initData: initData
     };
   } catch (error) {
     // Если ошибка или приложение не в Telegram, возвращаем фейковые данные
     return {
-      username: 'fakeuser',
-      first_name: 'Fake',
-      last_name: 'User',
+      initData: 'nemadata',
     };
   }
 };
