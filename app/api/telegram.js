@@ -1,29 +1,42 @@
-import { Telegraf } from 'telegraf';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { MongoClient } from 'mongodb';
 
-const bot = new Telegraf(process.env.BOT_TOKEN); // Получаем токен из переменной окружения
-
-bot.command('start', (ctx) => {
-  ctx.reply('Привет, вот твоя игра!', {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: 'Запустить Игру', web_app: { url: 'https:/paskocoin.vercel.app' } }],
-      ],
-    },
-  });
-});
+const uri = process.env.MONGODB_URI; // Ваш URI для подключения к MongoDB
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 export default async function handler(req, res) {
-  try {
-    await bot.handleUpdate(req.body);
-    res.status(200).json({ status: 'ok' });
-  } catch (error) {
-    console.error('Error handling webhook:', error);
-    res.status(500).json({ error: 'Error handling webhook' });
+  if (req.method === 'POST') {
+    const { message } = req.body;
+
+    if (message && message.text === '/start') {
+      const chatId = message.chat.id;
+      await sendMessage(chatId, 'Welcome!');
+
+      await client.connect();
+      const database = client.db('PaskoCluster'); // Название вашей базы данных
+      const users = database.collection('users');
+      await users.insertOne({ userId: message.from.id });
+
+      res.status(200).end();
+    } else {
+      res.status(400).end();
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Отключаем bodyParser для работы с raw body
-  },
-};
+async function sendMessage(chatId, text) {
+  const response = await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: text,
+    }),
+  });
+  return response.json();
+}

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "mongodb": "^6.9.0",
     "next": "14.2.13",
     "node-telegram-bot-api": "^0.66.0",
     "react": "^18",
