@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+
+.cont-main {
+  height: 92vh;
+
+}
+
+.cont-foot {
+  height: 8vh;
+}
+
+.foot {
+  height: 100%;
+}
+
+
+h1 {
+  font-size: 5vw;
+  text-align: center;
+}
+
+/* Медиа-запросы для телефонов */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 8vw;
+  }
+}
+
+

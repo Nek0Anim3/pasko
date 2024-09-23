@@ -1,0 +1,17 @@
+
+
+.foot-cont {
+    display: flex;
+    flex-direction: row;
+    gap: 13vw;
+    height: 100%;
+    width: 100vw;
+    justify-content: center;
+    background-color: #141212;
+}
+
+button {
+    background-color: #141212;
+    border: none;
+    height: 8vh;
+}
