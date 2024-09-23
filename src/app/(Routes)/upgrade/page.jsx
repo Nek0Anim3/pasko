@@ -1,5 +1,5 @@
 import Layout from "../../Components/layout"
-import css from '../globals.css'
+import styles from './page.module.css'
 
 
 export default function Upgrade() {
