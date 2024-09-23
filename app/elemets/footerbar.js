@@ -13,19 +13,19 @@ export default function FooterBar() {
     <main>
         <div className="foot-cont">
         <button className="upgrade-but">
-          <Image src={upgrade} width={40} height={40} alt="Upgrade Icon" />
+          <Image src={upgrade} width={35} height={35} alt="Upgrade Icon" />
         </button>
         <button className="leader-but">
-          <Image src={leader} width={40} height={40} alt="Leader Icon" />
+          <Image src={leader} width={35} height={35} alt="Leader Icon" />
         </button>
         <button className="mine-but">
-          <Image src={mine} width={40} height={40} alt="Mine Icon" />
+          <Image src={mine} width={38} height={38} alt="Mine Icon" />
         </button>
         <button className="invite-but">
-          <Image src={invite} width={40} height={40} alt="Invite Icon" />
+          <Image src={invite} width={35} height={35} alt="Invite Icon" />
         </button>
         <button className="task-but">
-          <Image src={task} width={40} height={40} alt="Task Icon" />
+          <Image src={task} width={35} height={35} alt="Task Icon" />
         </button>
         </div>
     </main> 
