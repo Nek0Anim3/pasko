@@ -40,3 +40,7 @@ a {
     color-scheme: dark;
   }
 }
+
+.content {
+  height: 92vh;
+}
