@@ -9,15 +9,11 @@ export const getUserData = () => {
       throw new Error('Not in Telegram');
     }
 
-    console.log(initData.user?.username)
-    console.log(initData.user)
-    console.log(initData)
-
     // Возвращаем данные пользователя
     return {
-      username: initData.user?.username,
+      username: initData.user?.username, /*
       first_name: initData.user?.first_name,
-      last_name: initData.user?.last_name,
+      last_name: initData.user?.last_name,*/
     };
   } catch (error) {
     // Если ошибка или приложение не в Telegram, возвращаем фейковые данные

@@ -4,8 +4,8 @@ import { getUserData } from "@/src/utils/getUserData";
 
 
 export default function Layout({ children }) {
-  
-  getUserData
+
+  console.log(getUserData().username)
 
   return (
     <>
