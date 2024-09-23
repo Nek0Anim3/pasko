@@ -17,7 +17,7 @@ const Header = () => {
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <Image src="/avatar.jpg" width={50} height={50} style={{borderRadius:50}} />
-          <h1>{userData.username}</h1> {/*Бро низя больше 1 тега h1 на странице айайай*/}
+          <h1>{userData.user?.username}</h1> {/*Бро низя больше 1 тега h1 на странице айайай*/}
           <h1>#1</h1>
         </div>
 
