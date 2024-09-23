@@ -9,9 +9,10 @@ const Header = () => {
   let userData = getUserData().initData
   let userDataRaw = getUserData().initDataRaw
 
-  useEffect(() => {
-    console.log(userDataRaw)
-  }, [userDataRaw])
+  useEffect(() => { //надо потом убрать
+    console.log(userData)
+    //нужно как-то получить аватарку
+  }, [userData])
 
   return(
     <header className={styles.header}>
@@ -22,7 +23,7 @@ const Header = () => {
           <h1>#1</h1>
         </div>
 
-        <div className="stats">
+        <div className="stats"> {/*Было бы удобно материал юай использовать там сетка удобная есть*/}
           <div className="block1"></div>
           <div className="block2"></div>
           <div className="block3"></div>
