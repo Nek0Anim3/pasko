@@ -3,21 +3,21 @@
 import Image from "next/image"
 import styles from './Header.module.css'
 import { getUserData } from "@/src/utils/getUserData"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 const Header = () => {
-  const [initData, setInitData] = useState(getUserData().initData)
+  let userData = getUserData().initData
 
   useEffect(() => {
-    console.log(initData)
-  }, [initData])
+    console.log(userData)
+  }, [userData])
 
   return(
     <header className={styles.header}>
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <Image src="/avatar.jpg" width={50} height={50} style={{borderRadius:50}} />
-          <h1>NekoAnime</h1> {/*Бро низя больше 1 тега h1 на странице айайай*/}
+          <h1>{userData.username}</h1> {/*Бро низя больше 1 тега h1 на странице айайай*/}
           <h1>#1</h1>
         </div>
 
