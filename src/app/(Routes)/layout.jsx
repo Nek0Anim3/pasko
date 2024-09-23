@@ -1,8 +1,11 @@
 import Footer from "@/src/Components/ui/Footer/Footer";
 import Header from "@/src/Components/ui/Header/Header";
+import { getUserData } from "@/src/utils/getUserData";
 
 
 export default function Layout({ children }) {
+  getUserData
+
   return (
     <>
       <Header />
@@ -13,4 +16,3 @@ export default function Layout({ children }) {
     </>
   );
 }
-//TODO wtf is it???!!!?#!?#!@.3
