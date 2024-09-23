@@ -10,7 +10,7 @@ export default function Farm() {
                     <div className="profile">
                         <Image src={avatar} width={50} height={50} style={{borderRadius:50}}></Image>
                         <h1>NekoAnime</h1>
-                        <h1>#1</h1>
+                        <h1>#1яебал</h1>
                     </div>
                     <div className="stats">
                         <div className="block1"></div>
