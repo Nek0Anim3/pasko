@@ -12,7 +12,8 @@ export const getUserData = () => {
 
     // Возвращаем данные пользователя
     return {
-      initData: initData
+      initData: initData,
+      initDataRaw: initDataRaw
     };
   } catch (error) {
     // Если ошибка или приложение не в Telegram, возвращаем фейковые данные

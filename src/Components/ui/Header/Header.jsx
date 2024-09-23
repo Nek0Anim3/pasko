@@ -7,10 +7,11 @@ import { useEffect } from "react"
 
 const Header = () => {
   let userData = getUserData().initData
+  let userDataRaw = getUserData().initDataRaw
 
   useEffect(() => {
-    console.log(userData)
-  }, [userData])
+    console.log(userDataRaw)
+  }, [userDataRaw])
 
   return(
     <header className={styles.header}>
