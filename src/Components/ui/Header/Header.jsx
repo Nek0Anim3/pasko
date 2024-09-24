@@ -3,7 +3,7 @@
 import Image from "next/image"
 import styles from './Header.module.css'
 import { getUserData } from "@/src/utils/getUserData"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Grid2 } from "@mui/material"
 import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
