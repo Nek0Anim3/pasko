@@ -1,28 +1,60 @@
-export async function POST(req, res) {
-  const options = {
+import { NextResponse } from 'next/server';
+
+export async function POST(req) {
+  const token = process.env.BOT_TOKEN;
+  
+  // Параметры для первого запроса (getUserProfilePhotos)
+  const userProfilePhotosOptions = {
     method: 'POST',
     headers: {
       accept: 'application/json',
+      'User-Agent': 'Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)',
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ user_id: 1277009903, offset: 0, limit: 1 }),
+    body: JSON.stringify({ user_id: 1277009903, offset: null, limit: 1 }),  // запрос 1 фото
   };
 
   try {
-    const response = await fetch('https://api.telegram.org/7987999829:AAHy4J8q7zDY4WdMN3H3xVIwyvJ3m9qSTS4/getUserProfilePhotos', options);
-    
-    const text = await response.text(); // Отримай текст відповіді
-    
-    try {
-      const data = JSON.parse(text); // Спробуй розпарсити текст у JSON
-      return res.status(200).json(data);
-    } catch (jsonError) {
-      console.error("Помилка парсингу JSON:", jsonError, text); // Логуй помилку та відповідь
-      return res.status(500).json({ error: 'Invalid JSON response from API', details: text });
+    // Первый запрос на получение фотографий профиля
+    const response = await fetch(
+      `https://api.telegram.org/bot${token}/getUserProfilePhotos`,
+      userProfilePhotosOptions
+    );
+    const profileData = await response.json();
+
+    // Проверка, что есть хотя бы одно фото
+    if (profileData.result.photos && profileData.result.photos.length > 0) {
+      // Получаем file_id из первой фотографии
+      const file_id = profileData.result.photos[0][0].file_id;
+
+      // Параметры для второго запроса (getFile)
+      const fileOptions = {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'User-Agent': 'Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ file_id }),
+      };
+
+      // Второй запрос для получения файла
+      const fileResponse = await fetch(
+        `https://api.telegram.org/bot${token}/getFile`,
+        fileOptions
+      );
+      const fileData = await fileResponse.json();
+
+      // URL для загрузки аватара
+      const avatarUrl = `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`;
+
+      // Возвращаем URL аватара
+      return NextResponse.json({ avatarUrl });
+    } else {
+      return NextResponse.json({ error: 'No profile photos found' }, { status: 404 });
     }
-    
   } catch (error) {
-    console.error("Помилка запиту:", error);
-    return res.status(500).json({ error: 'Failed to fetch user profile photos' });
+    console.error('Error fetching avatar:', error);
+    return NextResponse.json({ error: 'Failed to fetch avatar' }, { status: 500 });
   }
 }

@@ -38,15 +38,18 @@ const Header = () => {
     setPhotoUrl(data.photoUrl);
   }, []); // Запускаем только один раз при монтировании
 
-
-  const [avatar, setAvatar] = useState(null);
-
   useEffect(() => {
-    fetch('/api/avatar')
-      .then((res) => {
-        console.log(res); // Выводим ответ в консоль
-      })
-      .catch((error) => console.error('Error fetching avatar:', error));
+    const fetchAvatar = async () => {
+      try {
+        const response = await fetch("/api/avatar", { method: "POST" });
+        const result = await response.json();
+        setPhotoUrl(result.avatarUrl);
+      } catch (error) {
+        console.error("Error fetching avatar:", error);
+      }
+    };
+  
+    fetchAvatar();
   }, []);
 
   return (
