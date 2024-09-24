@@ -38,6 +38,19 @@ const Header = () => {
     setPhotoUrl(data.photoUrl);
   }, []); // Запускаем только один раз при монтировании
 
+
+  const [avatar, setAvatar] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/avatar')
+      .then((res) => res.json())
+      .then((data) => {
+        setAvatar(data);
+        console.log(data); // Выводим ответ в консоль
+      })
+      .catch((error) => console.error('Error fetching avatar:', error));
+  }, []);
+
   return (
     <header className={styles.header}>
       <div className={styles.statsContainer}>
