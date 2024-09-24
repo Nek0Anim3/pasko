@@ -33,6 +33,7 @@ const Header = () => {
 
   useEffect(() => {
     const data = getUserData();
+    console.log("User data:", data); // Выводим данные для отладки
     setUserData(data.initData);
     setPhotoUrl(data.photoUrl);
   }, []); // Запускаем только один раз при монтировании
