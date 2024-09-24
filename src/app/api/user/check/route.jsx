@@ -1,26 +1,48 @@
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/src/lib/db';
+import mongoose from 'mongoose';
+
+const userSchema = new mongoose.Schema({
+  uid: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  points: {
+    type: Number,
+    default: 0
+  }
+});
+
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+const connectMongoDb = async () => {
+  await mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    connectTimeoutMS: 30000, // Увеличиваем таймаут до 30 секунд
+  });
+};
 
 export async function POST(req) {
   try {
     const { uid } = await req.json();
-    
+
     // Подключаемся к базе данных
-    const { database } = await connectToDatabase();
-    console.log(1)
+    await connectMongoDb();
+    console.log("Подключение к базе данных установлено.");
 
     // Проверяем, есть ли пользователь с таким uid
-    let user = await database.collection('users').findOne({ uid });
+    let user = await User.findOne({ uid });
 
     if (!user) {
       // Если пользователь не найден, создаем нового
-      const newUser = {
+      const newUser = new User({
         uid,           // ID аккаунта Telegram
         points: 0,     // Начальные очки
-      };
+      });
 
-      // Вставляем нового пользователя в коллекцию
-      await database.collection('users').insertOne(newUser);
+      // Сохраняем нового пользователя
+      await newUser.save();
 
       // Возвращаем успешный ответ
       return NextResponse.json({ message: 'User created', user: newUser });
@@ -31,6 +53,6 @@ export async function POST(req) {
 
   } catch (error) {
     console.error('Error:', error);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
   }
 }
