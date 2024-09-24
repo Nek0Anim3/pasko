@@ -43,10 +43,8 @@ const Header = () => {
 
   useEffect(() => {
     fetch('/api/avatar')
-      .then((res) => res.json())
-      .then((data) => {
-        setAvatar(data);
-        console.log(data); // Выводим ответ в консоль
+      .then((res) => {
+        console.log(res); // Выводим ответ в консоль
       })
       .catch((error) => console.error('Error fetching avatar:', error));
   }, []);
