@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   const token = process.env.BOT_TOKEN;
-  
+  const { uid } = await req.json(); 
+
   // Параметры для первого запроса (getUserProfilePhotos)
   const userProfilePhotosOptions = {
     method: 'POST',
@@ -11,7 +12,7 @@ export async function POST(req) {
       'User-Agent': 'Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)',
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ user_id: 1277009903, offset: null, limit: 1 }),  // запрос 1 фото
+    body: JSON.stringify({ user_id: uid, offset: null, limit: 1 }),  // запрос 1 фото
   };
 
   try {

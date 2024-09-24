@@ -33,15 +33,19 @@ const Header = () => {
 
   useEffect(() => {
     const data = getUserData();
-    console.log("User data:", data); // Выводим данные для отладки
+    //console.log("User data:", data); // Выводим данные для отладки
     setUserData(data.initData);
-    setPhotoUrl(data.photoUrl);
-  }, []); // Запускаем только один раз при монтировании
 
-  useEffect(() => {
     const fetchAvatar = async () => {
       try {
-        const response = await fetch("/api/avatar", { method: "POST" });
+        const response = await fetch("/api/avatar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Укажите тип содержимого
+          },
+          body: JSON.stringify({ uid: data.initData.user.id }), // Сериализуйте объект в JSON
+        });
+  
         const result = await response.json();
         setPhotoUrl(result.avatarUrl);
       } catch (error) {
@@ -50,7 +54,13 @@ const Header = () => {
     };
   
     fetchAvatar();
+
+  }, []); // Запускаем только один раз при монтировании
+
+  useEffect(() => {
+    
   }, []);
+  
 
   return (
     <header className={styles.header}>
