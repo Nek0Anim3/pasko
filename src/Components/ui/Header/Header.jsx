@@ -35,15 +35,32 @@ const Header = () => {
     const data = getUserData();
     setUserData(data.initData);
     setPhotoUrl(data.photoUrl);
-  }, []);
+  }, []); // Запускаем только один раз при монтировании
 
-  return(
+  return (
     <header className={styles.header}>
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <div className={styles.user}>
-            <Image src={photoUrl} width={35} height={35} style={{borderRadius:50}} />
-            <h1>{userData.user?.username}</h1> {/**/}
+            {photoUrl ? (
+              <Image
+                src={photoUrl}
+                width={35}
+                height={35}
+                style={{ borderRadius: '50%' }}
+                alt="User Avatar"
+              />
+            ) : (
+              <div
+                style={{
+                  width: 35,
+                  height: 35,
+                  borderRadius: '50%',
+                  backgroundColor: '#ccc',
+                }}
+              /> // Заглушка для аватара
+            )}
+            <h1>{userData?.user?.username || 'Guest'}</h1> {/**/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>
