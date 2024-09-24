@@ -30,6 +30,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const Header = () => {
   let userData = getUserData().initData
   let userDataRaw = getUserData().initDataRaw
+  let photoUrl = getUserData().photoUrl
 
   useEffect(() => { //надо потом убрать
     console.log(userData)
@@ -41,7 +42,7 @@ const Header = () => {
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <div className={styles.user}>
-            <Image src="/avatar.jpg" width={35} height={35} style={{borderRadius:50}} />
+            <Image src={photoUrl} width={35} height={35} style={{borderRadius:50}} />
             <h1>{userData.user?.username}</h1> {/**/}
           </div>
           <div className={styles.place}>

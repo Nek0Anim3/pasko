@@ -1,4 +1,5 @@
 import { retrieveLaunchParams } from '@telegram-apps/sdk';
+import { useState, useEffect } from 'react';
 
 export const getUserData = () => {
   try {
@@ -6,23 +7,46 @@ export const getUserData = () => {
 
     // Проверка, что приложение запущено в Telegram
     if (!initDataRaw) {
-      
       throw new Error('Not in Telegram');
     }
 
-    // Возвращаем данные пользователя
+    // Возвращаем данные пользователя, включая аватар
     return {
       initData: initData,
-      initDataRaw: initDataRaw
+      photoUrl: initData.user?.photo_url || null, // Получаем ссылку на аватар пользователя
+      username: initData.user?.username || 'Guest', // Получаем имя пользователя
     };
   } catch (error) {
     // Если ошибка или приложение не в Telegram, возвращаем фейковые данные
     return {
       initData: 'nemadata',
+      username: 'Guest',
+      photoUrl: '/potuzhno.png',
     };
   }
 };
 
-//гпт нагенерил
+const UserProfile = () => {
+  const [userData, setUserData] = useState({
+    username: 'Guest',
+    photoUrl: null,
+  });
 
-//Kostik: Отето ты потужно тут наделал я хуею! Ты молодец дуже великий, я тебе потом как выберемся в холода уже гулять, куплю чёта вкусненькое
+  useEffect(() => {
+    const data = getUserData();
+    setUserData(data);
+  }, []);
+
+  return (
+    <div>
+      <h1>Welcome, {userData.username}!</h1>
+      {userData.photoUrl ? (
+        <img src={userData.photoUrl} alt="User Avatar" width={100} height={100} />
+      ) : (
+        <p>No avatar available</p>
+      )}
+    </div>
+  );
+};
+
+export default UserProfile;
