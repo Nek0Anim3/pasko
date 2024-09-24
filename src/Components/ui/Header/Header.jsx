@@ -28,14 +28,14 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 const Header = () => {
-  let userData = getUserData().initData
-  let userDataRaw = getUserData().initDataRaw
-  let photoUrl = getUserData().photoUrl
+  const [userData, setUserData] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
-  useEffect(() => { //надо потом убрать
-    console.log(userData)
-    //нужно как-то получить аватарку
-  }, [userData])
+  useEffect(() => {
+    const data = getUserData();
+    setUserData(data.initData);
+    setPhotoUrl(data.photoUrl);
+  }, []);
 
   return(
     <header className={styles.header}>
