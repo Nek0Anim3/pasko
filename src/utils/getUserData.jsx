@@ -2,7 +2,7 @@ import { retrieveLaunchParams } from '@telegram-apps/sdk';
 
 export const getUserData = () => {
   try {
-    const { initDataRaw, initData, themeParams } = retrieveLaunchParams();
+    const { initDataRaw, initData, initDataUnsafe } = retrieveLaunchParams();
 
     // Проверка, что приложение запущено в Telegram
     if (!initDataRaw) {
@@ -13,7 +13,7 @@ export const getUserData = () => {
     return {
       initData,
       initDataRaw,
-      themeParams,
+      initDataUnsafe,
       photoUrl: initData.user?.photo_url || null, // Получаем ссылку на аватар пользователя
     };
   } catch (error) {
