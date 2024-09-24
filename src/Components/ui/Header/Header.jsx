@@ -57,11 +57,6 @@ const Header = () => {
 
   }, []); // Запускаем только один раз при монтировании
 
-  useEffect(() => {
-    
-  }, []);
-  
-
   return (
     <header className={styles.header}>
       <div className={styles.statsContainer}>
