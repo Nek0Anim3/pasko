@@ -42,7 +42,7 @@ const Header = () => {
         <div className={styles.userInfo}>
           <div className={styles.user}>
             <Image src="/avatar.jpg" width={35} height={35} style={{borderRadius:50}} />
-            <h1>NekoAnime</h1> {/*{userData.user?.username}*/}
+            <h1>{userData.user?.username}</h1> {/**/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>
