@@ -7,10 +7,11 @@ export const getUserData = () => {
     // Проверка, что приложение запущено в Telegram
     if (!initDataRaw) {
       throw new Error('Not in Telegram');
-    }
+    } 
 
     return {
       initData,
+      dbData
     };
   } catch (error) {
     // Если ошибка или приложение не в Telegram, возвращаем фейковые данные

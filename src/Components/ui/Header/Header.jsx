@@ -32,12 +32,13 @@ const Header = () => {
   const [photoUrl, setPhotoUrl] = useState(null);
 
   useEffect(() => {
-    const data = getUserData();
-    //console.log("User data:", data); // Выводим данные для отладки
-    setUserData(data.initData);
-
-    const fetchAvatar = async () => {
+    const fetchUser = async () => {
       try {
+        const data = await getUserData();
+        const dbData = await fetch("api/user/check", {method: "POST", body: JSON.stringify({uid: data.initData.user.id})})
+        console.log("User data:", dbData); // Выводим данные для отладки
+        setUserData(data.initData);
+
         const response = await fetch("/api/avatar", {
           method: "POST",
           headers: {
@@ -53,7 +54,7 @@ const Header = () => {
       }
     };
   
-    fetchAvatar();
+    fetchUser();
 
   }, []); // Запускаем только один раз при монтировании
 

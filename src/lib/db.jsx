@@ -1,36 +1,39 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URL;
-const options = {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-};
+const uri = process.env.MONGO_URL;
 
 let mongoClient = null;
 let database = null;
 
-if (!process.env.MONGODB_URL) {
-    throw new Error('Please add your Mongo URI to .env.local')
+if (!uri) {
+    throw new Error('Please add your Mongo URI to .env.local');
 }
 
 export async function connectToDatabase() {
     try {
+        // Если клиент и база данных уже инициализированы, возвращаем их
         if (mongoClient && database) {
             return { mongoClient, database };
         }
+
         if (process.env.NODE_ENV === "development") {
             if (!global._mongoClient) {
-                mongoClient = await (new MongoClient(uri, options)).connect();
+                mongoClient = new MongoClient(uri); // Убираем параметры
+                await mongoClient.connect();
                 global._mongoClient = mongoClient;
             } else {
                 mongoClient = global._mongoClient;
             }
         } else {
-            mongoClient = await (new MongoClient(uri, options)).connect();
+            mongoClient = new MongoClient(uri); // Убираем параметры
+            await mongoClient.connect();
         }
-        database = await mongoClient.db(process.env.MONGODB_URL);
+
+        // Убедитесь, что вы используете правильное имя базы данных, а не URL
+        database = mongoClient.db(); // Получаем базу данных по умолчанию
         return { mongoClient, database };
     } catch (e) {
-        console.error(e);
+        console.error('Database connection error:', e);
+        throw e; // Прокидываем ошибку, чтобы обработать ее в вызывающем коде
     }
 }

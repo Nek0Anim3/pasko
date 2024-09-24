@@ -6,10 +6,11 @@ export async function POST(req) {
     const { uid } = await req.json();
     
     // Подключаемся к базе данных
-    const { db } = await connectToDatabase();
-    
+    const { database } = await connectToDatabase();
+    console.log(1)
+
     // Проверяем, есть ли пользователь с таким uid
-    let user = await db.collection('users').findOne({ uid });
+    let user = await database.collection('users').findOne({ uid });
 
     if (!user) {
       // Если пользователь не найден, создаем нового
@@ -19,7 +20,7 @@ export async function POST(req) {
       };
 
       // Вставляем нового пользователя в коллекцию
-      await db.collection('users').insertOne(newUser);
+      await database.collection('users').insertOne(newUser);
 
       // Возвращаем успешный ответ
       return NextResponse.json({ message: 'User created', user: newUser });
