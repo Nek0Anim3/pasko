@@ -42,7 +42,7 @@ export default function Farm() {
   }, [effects]);
 
 
-  //ТУТА ВОТ ИЗМЕНЕНИЕ РАЗМЕРОВ КАРТИНКИ ТОЛИКА
+  //ТУТА ВОТ ИЗМЕНЕНИЕ РАЗМЕРОВ КАРТИНКИ ТОЛИКА 
   const initialSize = { width: 300, height: 300 };
   const [size, setSize] = useState(initialSize);
 
@@ -75,7 +75,7 @@ export default function Farm() {
                     {effect.text}
                   </span>
                 ))}
-                <button className={styles.tapbutton} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
+                <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
                   <Image className='paskoimage' src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
                 </button>
               </div>
