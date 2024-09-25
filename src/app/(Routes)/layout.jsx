@@ -5,45 +5,45 @@ import Header from "@/src/Components/ui/Header/Header";
 import useUserStore from "@/src/Store/userStore";
 import { getUserData } from "@/src/utils/getUserData";
 import { useEffect } from "react";
-import { postEvent } from '@telegram-apps/sdk';
+import { postEvent, onEvent } from "@telegram-apps/sdk";
 
 export default function Layout({ children }) {
   const { isLoading, setUser, userData } = useUserStore();
 
   useEffect(() => {
-    const closeAppWithRequest = async (event) => {
-      // Prevent default behavior of the event to make sure the request completes
-      event.preventDefault();
-
+    function closeAppWithRequest() {
       if (userData && userData.user) {
-        try {
-          const response = await fetch('/api/user/putUser', {
-            method: 'PUT',
-            body: JSON.stringify({ uid: userData.user.uid, points: 1 }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+        const points = userData.user.points;
 
-          const data = await response.json();
-          console.log('Request successful', data);
+        // Отправка запроса на сервер перед закрытием
+        fetch("https://your-api-url.com/close-app", {
+          method: "POST",
+          body: JSON.stringify({ points }), // Правильный формат данных
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Request successful", data);
 
-          postEvent('web_app_close', {
-            return_back: true,
+            // После завершения запроса, вызываем web_app_close
+            postEvent("web_app_close", {
+              return_back: true, // Опционально
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
           });
-        } catch (error) {
-          console.error('Error:', error);
-        }
       }
+    }
 
-      // Optionally, you can return a message here to confirm before leaving
-      event.returnValue = ''; // Required for the confirmation dialog to be shown
-    };
+    // Использование SDK для перехвата закрытия приложения
+    onEvent("web_app_close", closeAppWithRequest);
 
-    window.addEventListener('beforeunload', closeAppWithRequest);
-
+    // Очистка при размонтировании компонента
     return () => {
-      window.removeEventListener('beforeunload', closeAppWithRequest);
+      onEvent("web_app_close", null);
     };
   }, [userData]);
 
