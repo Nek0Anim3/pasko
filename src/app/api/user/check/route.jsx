@@ -22,6 +22,7 @@ export async function POST(req) {
         income: 0,
         friendsInvited: 0,
         level: 0,
+        upgrades: []
       };
 
       // Сохраняем нового пользователя
