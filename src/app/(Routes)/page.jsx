@@ -4,7 +4,10 @@ export default function Farm() {
   return  (
     <main>
       <div className={styles.clickerContent}>
-        <div className="clicker-container"></div>
+        <div className={styles.clickerContainer}>
+          <button className={styles.paskoEblet}>123</button>
+          <p>2817329</p>
+        </div>
       </div>
     </main>
   )

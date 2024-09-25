@@ -1,4 +1,21 @@
 .clickerContent {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.clickerContainer{
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.paskoEblet{
+  width: 80%;
 }
