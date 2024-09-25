@@ -7,7 +7,7 @@ import { getUserData } from "@/src/utils/getUserData";
 import { useEffect } from "react";
 
 export default function Layout({ children }) {
-  const { isLoading, setUser } = useUserStore();
+  const { isLoading, setUser, userData} = useUserStore();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -57,7 +57,7 @@ export default function Layout({ children }) {
       // Регистрируем обработчик события закрытия
       window.Telegram.WebApp.onEvent('close', () => {
         console.log('Mini App closed');
-        // Здесь можно добавить логику, которую нужно выполнить при закрытии
+        fetch("api/user/putUser", {method: "PUT", body: {points: userData.user.points}})
       });
     }
   }, []);
