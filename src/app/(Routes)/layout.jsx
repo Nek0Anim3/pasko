@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Footer from "@/src/Components/ui/Footer/Footer";
 import Header from "@/src/Components/ui/Header/Header";
@@ -8,42 +8,38 @@ import { useEffect } from "react";
 import { postEvent } from '@telegram-apps/sdk';
 
 export default function Layout({ children }) {
-  const { isLoading, setUser, userData} = useUserStore();
+  const { isLoading, setUser, userData } = useUserStore();
 
   useEffect(() => {
-    function closeAppWithRequest() {
+    const closeAppWithRequest = async () => {
       if (userData && userData.user) {
         const points = userData.user.points;
 
-        // Send your request to the server before closing
-        fetch('api/user/putUser', {
-          method: 'PUT',
-          body: JSON.stringify({ points }), // Properly format the request payload
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Request successful', data);
-          
-          // After the request is completed, emit the web_app_close event
-          postEvent('web_app_close', {
-            return_back: true // Optional, depends on how the app is opened
+        try {
+          const response = await fetch('api/user/putUser', {
+            method: 'PUT',
+            body: JSON.stringify({ points }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
           });
-        })
-        .catch((error) => {
+
+          const data = await response.json();
+          console.log('Request successful', data);
+
+          postEvent('web_app_close', {
+            return_back: true
+          });
+        } catch (error) {
           console.error('Error:', error);
-        });
+        }
       }
-    }
+    };
 
-    // Bind the closeAppWithRequest function to window before unload event
-    window.onbeforeunload = closeAppWithRequest;
+    window.addEventListener('beforeunload', closeAppWithRequest);
 
-    // Clean up the event listener on unmount
     return () => {
-      window.onbeforeunload = null;
+      window.removeEventListener('beforeunload', closeAppWithRequest);
     };
   }, [userData]);
 
@@ -52,7 +48,6 @@ export default function Layout({ children }) {
       try {
         const data = await getUserData();
 
-        // Параллельные запросы
         const [dbResponse, avatarResponse] = await Promise.all([
           fetch("api/user/check", {
             method: "POST",
@@ -78,9 +73,7 @@ export default function Layout({ children }) {
         const { user } = await dbResponse.json();
         const { avatarUrl } = await avatarResponse.json();
 
-        // Сохраняем данные в Zustand
-        setUser({user, tgUser}, avatarUrl);
-
+        setUser({ user, tgUser }, avatarUrl);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -89,8 +82,7 @@ export default function Layout({ children }) {
     fetchUser();
   }, [setUser]);
 
-
-  if(isLoading) return <div>Loading</div>
+  if (isLoading) return <div>Loading</div>;
 
   return (
     <>
