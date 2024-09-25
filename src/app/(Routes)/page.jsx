@@ -61,30 +61,28 @@ export default function Farm() {
   };
 
   return  (
-    <main>
-      <div className={styles.clickerContent}>
-        <div className={styles.clickerContaienr}>
-          <div className={styles.lvlContainer}>
-            <div className={styles.lvl}></div>
-          </div>
-          <div className={styles.buttonContainer}>
-            <button className={styles.clickArea} onClick={handleClick}>
-                {effects.map(effect => (
-                  <span
-                    key={effect.id}
-                    className={styles.tapEffect}
-                    style={{ left: effect.x, top: effect.y }}
-                  >
-                    {effect.text}
-                  </span>
-                ))}
-                <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
-                  <Image className={styles.paskoimage} src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
-                </button>
-            </button>
+    <div className={styles.clickerContent}>
+      <div className={styles.clickerContaienr}>
+        <div className={styles.lvlContainer}>
+          <div className={styles.lvl}></div>
+        </div>
+        <div className={styles.buttonContainer}>
+          <div className={styles.clickArea} onClick={handleClick}>
+              {effects.map(effect => (
+                <span
+                  key={effect.id}
+                  className={styles.tapEffect}
+                  style={{ left: effect.x, top: effect.y }}
+                >
+                  {effect.text}
+                </span>
+              ))}
+              <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
+                <Image className={styles.paskoimage} src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
+              </button>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
