@@ -25,7 +25,7 @@
   overflow: hidden; /* Скрываем эффекты, выходящие за границы */
   cursor: pointer;
   user-select: none;
-  
+  pointer-events: none;
 }
 
 .tapEffect {
