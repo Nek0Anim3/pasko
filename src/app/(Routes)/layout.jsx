@@ -5,7 +5,7 @@ import Header from "@/src/Components/ui/Header/Header";
 import useUserStore from "@/src/Store/userStore";
 import { getUserData } from "@/src/utils/getUserData";
 import { useEffect } from "react";
-import { postEvent, onEvent } from "@telegram-apps/sdk";
+import { postEvent } from "@telegram-apps/sdk";
 
 export default function Layout({ children }) {
   const { isLoading, setUser, userData } = useUserStore();
@@ -15,10 +15,10 @@ export default function Layout({ children }) {
       if (userData && userData.user) {
         const points = userData.user.points;
 
-        // Отправка запроса на сервер перед закрытием
+        // Отправка запроса на сервер перед закрытием приложения
         fetch("https://your-api-url.com/close-app", {
           method: "POST",
-          body: JSON.stringify({ points }), // Правильный формат данных
+          body: JSON.stringify({ points }), // Корректный формат данных
           headers: {
             "Content-Type": "application/json",
           },
@@ -27,9 +27,9 @@ export default function Layout({ children }) {
           .then((data) => {
             console.log("Request successful", data);
 
-            // После завершения запроса, вызываем web_app_close
+            // После отправки запроса вызовите закрытие приложения через Telegram SDK
             postEvent("web_app_close", {
-              return_back: true, // Опционально
+              return_back: true, // Опционально, зависит от использования
             });
           })
           .catch((error) => {
@@ -38,12 +38,14 @@ export default function Layout({ children }) {
       }
     }
 
-    // Использование SDK для перехвата закрытия приложения
-    onEvent("web_app_close", closeAppWithRequest);
+    // Добавляем слушатель для действия "назад" (если необходимо)
+    postEvent("web_app_setup_back_button", { is_visible: true });
 
-    // Очистка при размонтировании компонента
+    // Пример: вызываем функцию при каком-либо действии, например, закрытие окна или кнопка
+    window.addEventListener("beforeunload", closeAppWithRequest);
+
     return () => {
-      onEvent("web_app_close", null);
+      window.removeEventListener("beforeunload", closeAppWithRequest);
     };
   }, [userData]);
 
