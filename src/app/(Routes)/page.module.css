@@ -8,6 +8,8 @@
   background-color: #0a0a0a;
   border: none;
   transition: 10ms;
+  outline: none;
+  user-select: none;
 }
 
 .buttonContainer {
@@ -22,6 +24,8 @@
   height: auto;
   overflow: hidden; /* Скрываем эффекты, выходящие за границы */
   cursor: pointer;
+  user-select: none;
+  
 }
 
 .tapEffect {
