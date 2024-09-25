@@ -4,10 +4,16 @@ import Footer from "@/src/Components/ui/Footer/Footer";
 import Header from "@/src/Components/ui/Header/Header";
 import useUserStore from "@/src/Store/userStore";
 import { getUserData } from "@/src/utils/getUserData";
+import { initClosingBehavior } from "@telegram-apps/sdk";
 import { useEffect } from "react";
 
 export default function Layout({ children }) {
   const { isLoading, setUser, userData} = useUserStore();
+  const [closingBehavior] = initClosingBehavior();
+
+  useEffect(() => {
+    console.log(closingBehavior.on)
+  }, [])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -50,18 +56,6 @@ export default function Layout({ children }) {
 
     fetchUser();
   }, [setUser]);
-
-  useEffect(() => {
-    // Проверяем, доступно ли Telegram WebApp
-    if (window.Telegram && window.Telegram.WebApp) {
-      console.log("111")
-      // Регистрируем обработчик события закрытия
-      window.Telegram.WebApp.onEvent('close', () => {
-        console.log('Mini App closed');
-        fetch("api/user/putUser", {method: "PUT", body: JSON.stringify({points: userData.user.points})})
-      });
-    }
-  }, []);
 
 
   if(isLoading) return <div>Loading</div>
