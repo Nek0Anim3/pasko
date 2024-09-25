@@ -16,9 +16,9 @@ export default function Layout({ children }) {
         const points = userData.user.points;
 
         // Отправка запроса на сервер перед закрытием приложения
-        fetch("https://your-api-url.com/close-app", {
+        fetch("api/user/putUser", {
           method: "POST",
-          body: JSON.stringify({ points }), // Корректный формат данных
+          body: JSON.stringify({ uid: userData.user.uid , points }), // Корректный формат данных
           headers: {
             "Content-Type": "application/json",
           },
