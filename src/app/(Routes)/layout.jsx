@@ -57,7 +57,7 @@ export default function Layout({ children }) {
       // Регистрируем обработчик события закрытия
       window.Telegram.WebApp.onEvent('close', () => {
         console.log('Mini App closed');
-        fetch("api/user/putUser", {method: "PUT", body: {points: userData.user.points}})
+        fetch("api/user/putUser", {method: "PUT", body: JSON.stringify({points: userData.user.points})})
       });
     }
   }, []);
