@@ -35,8 +35,22 @@ const Header = () => {
     const fetchUser = async () => {
       try {
         const data = await getUserData();
-        const dbData = await fetch("api/user/check", {method: "POST", body: JSON.stringify({uid: data.initData.user.id})})
-        console.log("User data:", dbData); // Выводим данные для отладки
+
+        const dBResponse = await fetch("api/user/check", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json', // Не забудьте установить заголовок
+          },
+          body: JSON.stringify({ uid: data.initData.user.id }),
+        });
+        
+        if (!dBResponse.ok) {
+          throw new Error("Ошибка запроса: " + dBResponse.status);
+        }
+        
+        const { user } = await dBResponse.json();
+        console.log("User data:", user); // Выводим данные для отладки
+
         setUserData(data.initData);
 
         const response = await fetch("/api/avatar", {

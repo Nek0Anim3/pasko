@@ -1,55 +1,34 @@
 import { NextResponse } from 'next/server';
-import mongoose from 'mongoose';
-
-const userSchema = new mongoose.Schema({
-  uid: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  points: {
-    type: Number,
-    default: 0
-  }
-});
-
-const User = mongoose.models.User || mongoose.model('User', userSchema);
-
-const connectMongoDb = async () => {
-  await mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    connectTimeoutMS: 30000, // Увеличиваем таймаут до 30 секунд
-  });
-};
+import { connectToDatabase } from '@/src/lib/db'; // подключение к MongoDB клиенту
 
 export async function POST(req) {
   try {
     const { uid } = await req.json();
 
+    const { database } = await connectToDatabase();
+
     // Подключаемся к базе данных
-    await connectMongoDb();
     console.log("Подключение к базе данных установлено.");
 
     // Проверяем, есть ли пользователь с таким uid
-    let user = await User.findOne({ uid });
+    let user = await database.collection("users").findOne({ uid });
 
     if (!user) {
-      // Если пользователь не найден, создаем нового
-      const newUser = new User({
+      // Если пользователь не найден, создаем нового пользователя
+      const newUser = {
         uid,           // ID аккаунта Telegram
         points: 0,     // Начальные очки
-      });
+      };
 
       // Сохраняем нового пользователя
-      await newUser.save();
+      await database.collection("users").insertOne(newUser);
 
       // Возвращаем успешный ответ
-      return NextResponse.json({ message: 'User created', user: newUser });
+      return NextResponse.json({ user: newUser });
     }
 
     // Если пользователь найден, возвращаем его данные
-    return NextResponse.json({ message: 'User exists', user });
+    return NextResponse.json({ user });
 
   } catch (error) {
     console.error('Error:', error);
