@@ -11,7 +11,6 @@ export const getUserData = () => {
 
     return {
       initData,
-      dbData
     };
   } catch (error) {
     // Если ошибка или приложение не в Telegram, возвращаем фейковые данные
@@ -21,8 +20,6 @@ export const getUserData = () => {
           id: 1277009903
         }
       },
-      initDataRaw: null,
-      photoUrl: null,
     };
   }
 };

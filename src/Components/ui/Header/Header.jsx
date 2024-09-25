@@ -28,49 +28,53 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 const Header = () => {
-  const [userData, setUserData] = useState(null);
-  const [photoUrl, setPhotoUrl] = useState(null);
+  const [state, setState] = useState({
+    userData: null,
+    photoUrl: null,
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const data = await getUserData();
-
-        const dBResponse = await fetch("api/user/check", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json', // Не забудьте установить заголовок
-          },
-          body: JSON.stringify({ uid: data.initData.user.id }),
-        });
         
-        if (!dBResponse.ok) {
-          throw new Error("Ошибка запроса: " + dBResponse.status);
+        // Параллельные запросы
+        const [dbResponse, avatarResponse] = await Promise.all([
+          fetch("api/user/check", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ uid: data.initData.user.id }),
+          }),
+          fetch("api/avatar", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ uid: data.initData.user.id }),
+          }),
+        ]);
+
+        if (!dbResponse.ok) {
+          throw new Error(`Ошибка запроса: ${dbResponse.status}`);
         }
-        
-        const { user } = await dBResponse.json();
-        console.log("User data:", user); // Выводим данные для отладки
 
-        console.log(data.initData)
-        setUserData(data.initData);
+        const { user } = await dbResponse.json();
+        const { avatarUrl } = await avatarResponse.json();
 
-        const response = await fetch("api/avatar", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Укажите тип содержимого
-          },
-          body: JSON.stringify({ uid: data.initData.user.id }), // Сериализуйте объект в JSON
+        console.log("User data:", user);
+        setState({
+          userData: data.initData,
+          photoUrl: avatarUrl,
         });
-  
-        const result = await response.json();
-        setPhotoUrl(result.avatarUrl);
+
       } catch (error) {
-        console.error("Error fetching avatar:", error);
+        console.error("Error fetching data:", error);
       }
     };
-  
-    fetchUser();
 
+    fetchUser();
   }, []); // Запускаем только один раз при монтировании
 
   return (
@@ -78,9 +82,9 @@ const Header = () => {
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <div className={styles.user}>
-            {photoUrl ? (
+            {state.photoUrl ? (
               <Image
-                src={photoUrl}
+                src={state.photoUrl}
                 width={35}
                 height={35}
                 style={{ borderRadius: '50%' }}
@@ -96,7 +100,7 @@ const Header = () => {
                 }}
               /> // Заглушка для аватара
             )}
-            <h1>{userData?.user?.username || 'Guest'}</h1> {/**/}
+            <h1>{state.userData?.user?.username || 'Guest'}</h1> {/**/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>
