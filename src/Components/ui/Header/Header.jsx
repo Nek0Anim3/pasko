@@ -6,6 +6,7 @@ import { Grid2 } from "@mui/material"
 import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import useUserStore from "@/src/Store/userStore"
+import abbreviateNumber from "@/src/utils/abbreviateNumber"
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -26,8 +27,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Header = () => {
   const { userData, photoUrl } = useUserStore(); // состояние и метод для обновления состояния
-
-  console.log(userData)
   // Если данные еще загружаются, возвращаем состояние загрузки
 
   return (
@@ -63,7 +62,7 @@ const Header = () => {
           <Grid2 size={6}>
             <Item>
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
-              <h3>{userData.user.income} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
+              <h3>{abbreviateNumber(userData.user.income)} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
@@ -75,13 +74,13 @@ const Header = () => {
           <Grid2 size={6}>
             <Item>
               <Image src={'/pertap.svg'} width={22} height={22}></Image>
-              <h3>+{userData.user.pointsPerTap}</h3> {/* MongoDB */}
+              <h3>+{abbreviateNumber(userData.user.pointsPerTap)}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/paskocoin.png'} width={22} height={22}></Image>
-              <h3>{userData.user.points}</h3>
+              <h3>{abbreviateNumber(userData.user.points)}</h3>
             </Item>
           </Grid2>
         </Grid2>

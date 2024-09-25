@@ -7,7 +7,7 @@ import { useState, useEffect } from "react"
 import abbreviateNumber from "@/src/utils/abbreviateNumber";
 
 export default function Farm() {
-  const { userData } = useUserStore(); // состояние и метод для обновления состояния
+  const { userData, updateUserData } = useUserStore(); // состояние и метод для обновления состояния
 
   //ТУТ ПОТУЖНИЙ ПРИКОЛ С АНИМАЦИЕЙ (ПРОДА В CSS)
   const [effects, setEffects] = useState([]);
@@ -22,13 +22,25 @@ export default function Farm() {
 
     // Создаем новый эффект на основе клика
     const newEffect = {
-      id: Date.now(), // уникальный идентификатор для каждого эффекта (Неебу зачем так гпт сделал ну лан)
+      id: Date.now(),
       x: buttonCenterX + offsetX, 
       y: buttonCenterY + offsetY, 
-      text: `+${abbreviateNumber(userData.user.pointsPerTap)}` //ВОТ ТУТ ОЧ ВАЖНО ПОТОМ ЗАМЕНИТЬ НА ДАННЫЕ С ПРОКАЧКИ ЧЕЛИКА
+      text: `+${abbreviateNumber(userData.user.pointsPerTap+999)}`
     };
 
     setEffects((prevEffects) => [...prevEffects, newEffect]);
+
+    // Обновляем количество очков пользователя
+    const updatedPoints = userData.user.points + (userData.user.pointsPerTap+999);
+    
+    // Вызываем метод для обновления состояния
+    updateUserData({
+      ...userData,
+      user: {
+        ...userData.user,
+        points: updatedPoints
+      }
+    });
   };
 
   // Удаление эффекта через секунду

@@ -5,6 +5,7 @@ const useUserStore = create((set) => ({
   photoUrl: null,
   isLoading: true,
   setUser: (userData, photoUrl) => set({ userData, photoUrl, isLoading: false }),
+  updateUserData: (userData) => set({ userData }),
 }));
 
 export default useUserStore

@@ -51,6 +51,18 @@ export default function Layout({ children }) {
     fetchUser();
   }, [setUser]);
 
+  useEffect(() => {
+    // Проверяем, доступно ли Telegram WebApp
+    if (window.Telegram && window.Telegram.WebApp) {
+      // Регистрируем обработчик события закрытия
+      window.Telegram.WebApp.onEvent('close', () => {
+        console.log('Mini App closed');
+        // Здесь можно добавить логику, которую нужно выполнить при закрытии
+      });
+    }
+  }, []);
+
+
   if(isLoading) return <div>Loading</div>
 
   return (
