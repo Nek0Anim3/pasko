@@ -18,4 +18,9 @@
 
 .paskoEblet{
   width: 80%;
+  aspect-ratio: 1/1;
+}
+
+.pointsText{
+  font-size: 40px;
 }

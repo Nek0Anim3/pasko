@@ -6,7 +6,7 @@ export default function Farm() {
       <div className={styles.clickerContent}>
         <div className={styles.clickerContainer}>
           <button className={styles.paskoEblet}>123</button>
-          <p>2817329</p>
+          <p className={styles.pointsText}>2817329</p>
         </div>
       </div>
     </main>
