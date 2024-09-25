@@ -2,11 +2,10 @@
 
 import Image from "next/image"
 import styles from './Header.module.css'
-import { getUserData } from "@/src/utils/getUserData"
-import { useEffect, useState } from "react"
 import { Grid2 } from "@mui/material"
 import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
+import useUserStore from "@/src/Store/userStore"
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -25,66 +24,20 @@ const Item = styled(Paper)(({ theme }) => ({
   }),
 }));
 
-
-
 const Header = () => {
-  const [state, setState] = useState({
-    userData: null,
-    photoUrl: null,
-  });
+  const { userData, photoUrl } = useUserStore(); // состояние и метод для обновления состояния
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await getUserData();
-        
-        // Параллельные запросы
-        const [dbResponse, avatarResponse] = await Promise.all([
-          fetch("api/user/check", {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ uid: data.initData.user.id }),
-          }),
-          fetch("api/avatar", {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ uid: data.initData.user.id }),
-          }),
-        ]);
-
-        if (!dbResponse.ok) {
-          throw new Error(`Ошибка запроса: ${dbResponse.status}`);
-        }
-
-        const { user } = await dbResponse.json();
-        const { avatarUrl } = await avatarResponse.json();
-
-        console.log("User data:", user);
-        setState({
-          userData: data.initData,
-          photoUrl: avatarUrl,
-        });
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchUser();
-  }, []); // Запускаем только один раз при монтировании
+  console.log(userData)
+  // Если данные еще загружаются, возвращаем состояние загрузки
 
   return (
     <header className={styles.header}>
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <div className={styles.user}>
-            {state.photoUrl ? (
+            {photoUrl ? (
               <Image
-                src={state.photoUrl}
+                src={photoUrl}
                 width={35}
                 height={35}
                 style={{ borderRadius: '50%' }}
@@ -100,7 +53,7 @@ const Header = () => {
                 }}
               /> // Заглушка для аватара
             )}
-            <h1>{state.userData?.user?.username || 'Guest'}</h1> {/**/}
+            <h1>{userData?.user?.username || 'Guest'}</h1> {/**/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>
@@ -110,25 +63,25 @@ const Header = () => {
           <Grid2 size={6}>
             <Item>
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
-              <h3>9,99M / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
+              <h3>{userData.income} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/invite.svg'} width={22} height={22}></Image>
-              <h3>0</h3> {/* MongoDB */}
+              <h3>{userData.friendsInvited}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/pertap.svg'} width={22} height={22}></Image>
-              <h3>+999</h3> {/* MongoDB */}
+              <h3>+{userData.pointsPerTap}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/paskocoin.png'} width={22} height={22}></Image>
-              <h3>999T</h3>
+              <h3>{userData.points}</h3>
             </Item>
           </Grid2>
         </Grid2>

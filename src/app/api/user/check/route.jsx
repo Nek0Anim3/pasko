@@ -18,6 +18,10 @@ export async function POST(req) {
       const newUser = {
         uid,           // ID аккаунта Telegram
         points: 0,     // Начальные очки
+        pointsPerTap: 1,
+        income: 0,
+        friendsInvited: 0,
+        level: 0,
       };
 
       // Сохраняем нового пользователя

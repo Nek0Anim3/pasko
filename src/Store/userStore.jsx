@@ -1,14 +1,10 @@
-import create from 'zustand';
+import {create} from 'zustand';
 
 const useUserStore = create((set) => ({
-  userId: null,
-  username: '',
-  isAuth: false,
-
-  login: (userId, username) => set({ userId, username, isAuth: true }),
-  //logout: () => set({ userId: null, username: '', isAuth: false }),
+  userData: null,
+  photoUrl: null,
+  isLoading: true,
+  setUser: (userData, photoUrl) => set({ userData, photoUrl, isLoading: false }),
 }));
 
-export default useUserStore;
-
-//Это типа компонент для хранения чего-то, можно вызвать в любом компоненте проекта чтобы получить данные
+export default useUserStore
