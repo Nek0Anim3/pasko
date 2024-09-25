@@ -51,9 +51,10 @@ const Header = () => {
         const { user } = await dBResponse.json();
         console.log("User data:", user); // Выводим данные для отладки
 
+        console.log(data.initData)
         setUserData(data.initData);
 
-        const response = await fetch("/api/avatar", {
+        const response = await fetch("api/avatar", {
           method: "POST",
           headers: {
             "Content-Type": "application/json", // Укажите тип содержимого
