@@ -4,16 +4,48 @@ import Footer from "@/src/Components/ui/Footer/Footer";
 import Header from "@/src/Components/ui/Header/Header";
 import useUserStore from "@/src/Store/userStore";
 import { getUserData } from "@/src/utils/getUserData";
-import { initClosingBehavior } from "@telegram-apps/sdk";
 import { useEffect } from "react";
+import { postEvent } from '@telegram-apps/sdk';
 
 export default function Layout({ children }) {
   const { isLoading, setUser, userData} = useUserStore();
-  const [closingBehavior] = initClosingBehavior();
 
   useEffect(() => {
-    console.log(closingBehavior.on)
-  }, [])
+    function closeAppWithRequest() {
+      if (userData && userData.user) {
+        const points = userData.user.points;
+
+        // Send your request to the server before closing
+        fetch('api/user/putUser', {
+          method: 'PUT',
+          body: JSON.stringify({ points }), // Properly format the request payload
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Request successful', data);
+          
+          // After the request is completed, emit the web_app_close event
+          postEvent('web_app_close', {
+            return_back: true // Optional, depends on how the app is opened
+          });
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    }
+
+    // Bind the closeAppWithRequest function to window before unload event
+    window.onbeforeunload = closeAppWithRequest;
+
+    // Clean up the event listener on unmount
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, [userData]);
 
   useEffect(() => {
     const fetchUser = async () => {
