@@ -68,7 +68,7 @@ export default function Farm() {
             <div className={styles.lvl}></div>
           </div>
           <div className={styles.buttonContainer}>
-            <div className={styles.clickArea} onClick={handleClick}>
+            <button className={styles.clickArea} onClick={handleClick}>
                 {effects.map(effect => (
                   <span
                     key={effect.id}
@@ -81,7 +81,7 @@ export default function Farm() {
                 <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
                   <Image className={styles.paskoimage} src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
                 </button>
-              </div>
+            </button>
           </div>
         </div>
       </div>
