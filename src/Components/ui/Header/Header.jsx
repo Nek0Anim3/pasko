@@ -53,7 +53,7 @@ const Header = () => {
                 }}
               /> // Заглушка для аватара
             )}
-            <h1>{userData?.user?.username || 'Guest'}</h1> {/**/}
+            <h1>{userData?.tgUser?.username || 'Guest'}</h1> {/**/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>
@@ -63,25 +63,25 @@ const Header = () => {
           <Grid2 size={6}>
             <Item>
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
-              <h3>{userData.income} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
+              <h3>{userData.user.income} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/invite.svg'} width={22} height={22}></Image>
-              <h3>{userData.friendsInvited}</h3> {/* MongoDB */}
+              <h3>{userData.user.friendsInvited}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/pertap.svg'} width={22} height={22}></Image>
-              <h3>+{userData.pointsPerTap}</h3> {/* MongoDB */}
+              <h3>+{userData.user.pointsPerTap}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item>
               <Image src={'/paskocoin.png'} width={22} height={22}></Image>
-              <h3>{userData.points}</h3>
+              <h3>{userData.user.points}</h3>
             </Item>
           </Grid2>
         </Grid2>

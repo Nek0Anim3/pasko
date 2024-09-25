@@ -36,11 +36,12 @@ export default function Layout({ children }) {
           throw new Error(`Ошибка запроса: ${dbResponse.status}`);
         }
 
+        const tgUser = data.initData.user;
         const { user } = await dbResponse.json();
         const { avatarUrl } = await avatarResponse.json();
 
         // Сохраняем данные в Zustand
-        setUser(user, avatarUrl);
+        setUser({user, tgUser}, avatarUrl);
 
       } catch (error) {
         console.error("Error fetching data:", error);

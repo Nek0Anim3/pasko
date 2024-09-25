@@ -1,10 +1,13 @@
 'use client';
 
+import useUserStore from "@/src/Store/userStore";
 import styles from "./page.module.css"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import abbreviateNumber from "@/src/utils/abbreviateNumber";
 
 export default function Farm() {
+  const { userData } = useUserStore(); // состояние и метод для обновления состояния
 
   //ТУТ ПОТУЖНИЙ ПРИКОЛ С АНИМАЦИЕЙ (ПРОДА В CSS)
   const [effects, setEffects] = useState([]);
@@ -22,7 +25,7 @@ export default function Farm() {
       id: Date.now(), // уникальный идентификатор для каждого эффекта (Неебу зачем так гпт сделал ну лан)
       x: buttonCenterX + offsetX, 
       y: buttonCenterY + offsetY, 
-      text: `+1` //ВОТ ТУТ ОЧ ВАЖНО ПОТОМ ЗАМЕНИТЬ НА ДАННЫЕ С ПРОКАЧКИ ЧЕЛИКА
+      text: `+${abbreviateNumber(userData.user.pointsPerTap)}` //ВОТ ТУТ ОЧ ВАЖНО ПОТОМ ЗАМЕНИТЬ НА ДАННЫЕ С ПРОКАЧКИ ЧЕЛИКА
     };
 
     setEffects((prevEffects) => [...prevEffects, newEffect]);
