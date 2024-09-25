@@ -79,7 +79,7 @@ export default function Farm() {
                   </span>
                 ))}
                 <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
-                  <Image className='paskoimage' src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
+                  <Image className={styles.paskoimage} src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
                 </button>
               </div>
           </div>
