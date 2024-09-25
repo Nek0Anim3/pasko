@@ -25,13 +25,13 @@ export default function Farm() {
       id: Date.now(),
       x: buttonCenterX + offsetX, 
       y: buttonCenterY + offsetY, 
-      text: `+${abbreviateNumber(userData.user.pointsPerTap+999)}`
+      text: `+${abbreviateNumber(userData.user.pointsPerTap)}`
     };
 
     setEffects((prevEffects) => [...prevEffects, newEffect]);
 
     // Обновляем количество очков пользователя
-    const updatedPoints = userData.user.points + (userData.user.pointsPerTap+999);
+    const updatedPoints = userData.user.points + (userData.user.pointsPerTap);
     
     // Вызываем метод для обновления состояния
     updateUserData({

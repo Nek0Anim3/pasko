@@ -11,29 +11,33 @@ export default function Layout({ children }) {
   const { isLoading, setUser, userData } = useUserStore();
 
   useEffect(() => {
-    const closeAppWithRequest = async () => {
-      if (userData && userData.user) {
-        const points = userData.user.points;
+    const closeAppWithRequest = async (event) => {
+      // Prevent default behavior of the event to make sure the request completes
+      event.preventDefault();
 
+      if (userData && userData.user) {
         try {
-          const response = await fetch('api/user/putUser', {
+          const response = await fetch('/api/user/putUser', {
             method: 'PUT',
-            body: JSON.stringify({ points }),
+            body: JSON.stringify({ uid: userData.user.uid, points: 1 }),
             headers: {
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+            },
           });
 
           const data = await response.json();
           console.log('Request successful', data);
 
           postEvent('web_app_close', {
-            return_back: true
+            return_back: true,
           });
         } catch (error) {
           console.error('Error:', error);
         }
       }
+
+      // Optionally, you can return a message here to confirm before leaving
+      event.returnValue = ''; // Required for the confirmation dialog to be shown
     };
 
     window.addEventListener('beforeunload', closeAppWithRequest);
