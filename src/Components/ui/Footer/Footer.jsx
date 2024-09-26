@@ -37,7 +37,7 @@ const Footer = () => {
             className={`${styles.footerButton} ${activeButton === 3 ? styles.active : ''}`} 
             onClick={() => handleButtonClick(3)}
           >
-            <Image src={'/mine.svg'} width={40} height={40} alt="Mine Icon" />
+            <Image src={'/mine.svg'} width={30} height={30} alt="Mine Icon" />
           </button>
         </Link>
 
