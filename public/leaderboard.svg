@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="_Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 244.35 247.26">
+<svg id="_Слой_2" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <style>
       .cls-1 {
-        fill: #fff;
+        fill: none;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: 24px;
       }
     </style>
   </defs>
-  <rect class="cls-1" y="81.13" width="70.73" height="166.13" rx="16.79" ry="16.79"/>
-  <rect class="cls-1" x="86.81" width="70.73" height="247.26" rx="16.79" ry="16.79"/>
-  <rect class="cls-1" x="173.62" y="127.49" width="70.73" height="119.77" rx="16.79" ry="16.79"/>
+  <rect class="cls-1" x="42.69" y="194.46" width="107.18" height="297.25" rx="22.9" ry="22.9"/>
+  <rect class="cls-1" x="195.78" y="73.43" width="111.65" height="418.28" rx="22.9" ry="22.9"/>
+  <rect class="cls-1" x="352.3" y="277.41" width="109.26" height="214.3" rx="22.9" ry="22.9"/>
 </svg>
