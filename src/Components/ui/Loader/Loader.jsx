@@ -31,15 +31,15 @@ const Loader = () => {
       timeline.to('.textAnim1', { duration: 0.5, opacity: 0, delay: 1 })
       timeline.fromTo('.introAnim', { top: "-100vh" }, { top: 0, duration: 1, ease: "power4.out" })
       timeline.to(".mainPart", { zIndex: -1 })
-      timeline.from(".text", { duration: 0.8, skewY: 10, y: 100, x: -199, opacity: 0, ease: "power4.inOut" })
-      timeline.fromTo(".introAnim", { backgroundColor: "white", color: 'black' }, { delay: 0.5, backgroundColor: "black", color: "white", duration: 1, ease: "power4.inOut" })
-
+      timeline.from(".text", { duration: 0.8, skewY: 20, y: 100, x: -200, opacity: 0, ease: "power4.inOut" })
+      timeline.fromTo(".introAnim", { backgroundColor: "white", color: 'black' }, { delay: 1, backgroundColor: "black", color: "white", duration: 1, ease: "power4.inOut" })
+      timeline.to(".text", { duration: 0.8, skewY: -20, y: 100, x: 200, opacity: 0, ease: "power4.inOut" })
 
       // Скрываем лоадер по завершению
       timeline.to(".loader", {
         opacity: 0,
         duration: 0.2,
-        delay: 0.2,
+        delay: 0.4,
         ease: "power1.in",
         display: "none",
         onComplete: () => setLoading(false)  // Устанавливаем isLoading = false после завершения анимации
