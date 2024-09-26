@@ -2,19 +2,30 @@
 import Image from 'next/image';
 import styles from './Footer.module.css';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useLoadingStore from '@/src/Store/loadingStore';
+import gsap from 'gsap';
 
 const Footer = () => {
   const [activeButton, setActiveButton] = useState(null); // Добавляем состояние для активной кнопки
   const {isLoadingAnim} = useLoadingStore();
+
+  useEffect(() => {
+    function animate () {
+      const timeline = gsap.timeline()
+
+      timeline.fromTo("footer", {bottom: "-50px"}, {bottom: "0"})
+    }
+
+    if(!isLoadingAnim) animate()
+  }, [isLoadingAnim])
 
   const handleButtonClick = (buttonIndex) => {
     setActiveButton(buttonIndex); // Меняем активную кнопку
   };
 
   return (
-    <footer>
+    <footer style={{bottom: "-50px"}}>
       <nav className={styles.footerContainer}>
         <Link href="/upgrade" passHref>
           <button 
