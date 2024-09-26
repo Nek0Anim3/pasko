@@ -28,12 +28,14 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Header = () => {
-  const { userData, photoUrl } = useUserStore(); // состояние и метод для обновления состояния
+  const { userData, photoUrl, isLoading } = useUserStore(); // состояние и метод для обновления состояния
   // Если данные еще загружаются, возвращаем состояние загрузки
 
   useEffect(() => {
     gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut"}) //нихуёво да (спиздил у хомяка)
   },[])
+
+  if(isLoading) return <></>
 
   return (
     <header className={styles.header}>

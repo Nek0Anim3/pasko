@@ -1,14 +1,7 @@
-"use client";
-
-import Footer from "@/src/Components/ui/Footer/Footer";
 import Header from "@/src/Components/ui/Header/Header";
-import useUserStore from "@/src/Store/userStore";
-import { getUserData } from "@/src/utils/getUserData";
-import { useEffect } from "react";
-import { postEvent } from "@telegram-apps/sdk";
+import Footer from "@/src/Components/ui/Footer/Footer";
 
 export default function Layout({ children }) {
-  const { isLoading, setUser } = useUserStore();
 
   /*
   fetch("api/user/putUser", {
@@ -20,26 +13,14 @@ export default function Layout({ children }) {
   })
   */
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const data = await getUserData();
-      if (data) {
-        const { initData, user, avatarUrl } = data;
-        setUser({ user, tgUser: initData.user }, avatarUrl);
-      }
-    };
-
-    fetchUser();
-  }, [setUser]);
-
-  if (isLoading) return <div>Loading</div>;
+  
 
   return (
     <>
       <Header />
-      <div className="content">
-        {children}
-      </div>
+        <div className="content">
+          {children}
+        </div>
       <Footer />
     </>
   );

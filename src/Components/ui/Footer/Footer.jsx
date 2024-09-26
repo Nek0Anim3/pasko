@@ -3,9 +3,11 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 import Link from 'next/link';
 import { useState } from 'react';
+import useLoadingStore from '@/src/Store/loadingStore';
 
 const Footer = () => {
   const [activeButton, setActiveButton] = useState(null); // Добавляем состояние для активной кнопки
+  const {isLoadingAnim} = useLoadingStore();
 
   const handleButtonClick = (buttonIndex) => {
     setActiveButton(buttonIndex); // Меняем активную кнопку
