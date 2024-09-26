@@ -9,6 +9,8 @@ import abbreviateNumber from "@/src/utils/abbreviateNumber";
 export default function Farm() {
   const { userData, updateUserData } = useUserStore(); // состояние и метод для обновления состояния
 
+  const [clickTimeout, setClickTimeout] = useState(null); // Для хранения таймера
+
   //ТУТ ПОТУЖНИЙ ПРИКОЛ С АНИМАЦИЕЙ (ПРОДА В CSS)
   const [effects, setEffects] = useState([]);
 
@@ -41,6 +43,20 @@ export default function Farm() {
         points: updatedPoints
       }
     });
+
+    // Сбрасываем таймер при каждом клике
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+    }
+
+    // Устанавливаем новый таймер на 1 секунду
+    const newTimeout = setTimeout(() => {
+      // Отправка запроса на сервер
+      console.log("Отправка запроса на сервер для обновления данных...");
+      fetch('/api/user/putUser', { method: 'PUT', body: JSON.stringify({uid: userData.user.uid, points: (userData.user.points + userData.user.pointsPerTap)})});
+    }, 1000);
+
+    setClickTimeout(newTimeout);
   };
 
   // Удаление эффекта через секунду
@@ -90,7 +106,7 @@ export default function Farm() {
                 </span>
               ))}
               <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
-                <Image className={styles.paskoimage} src={'/paskocoin.png'} width={size.width} height={size.height}></Image>
+                <Image className={styles.paskoimage} src={'/paskocoin.png'/*Єх вотбі оні мінялісь*/} width={size.width} height={size.height}></Image>
               </button>
           </div>
         </div>
