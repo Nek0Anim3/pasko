@@ -9,6 +9,7 @@ import useUserStore from "@/src/Store/userStore"
 import abbreviateNumber from "@/src/utils/abbreviateNumber"
 import { useEffect } from "react"
 import gsap from "gsap"
+import useLoadingStore from "@/src/Store/loadingStore"
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -30,10 +31,17 @@ const Item = styled(Paper)(({ theme }) => ({
 const Header = () => {
   const { userData, photoUrl, isLoading } = useUserStore(); // состояние и метод для обновления состояния
   // Если данные еще загружаются, возвращаем состояние загрузки
+  const {isLoadingAnim} = useLoadingStore()
 
   useEffect(() => {
-    gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut"}) //нихуёво да (спиздил у хомяка)
-  },[])
+    function animate () {
+      gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
+      gsap.fromTo("header", {y: -200}, {y: 0, duration: 0.5, ease: "power4.out"}) //нихуёво да (спиздил у хомяка)
+    }
+
+    if(!isLoadingAnim) animate()
+    
+  },[isLoadingAnim])
 
   if(isLoading) return <></>
 

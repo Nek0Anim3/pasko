@@ -32,6 +32,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .intro {
@@ -49,6 +50,12 @@
 
 .loadingText{
   color: transparent;
-  -webkit-text-stroke: 0.1px rgb(233, 162, 47);
-  text-stroke: 0.1px rgb(233, 162, 47);
+  -webkit-text-stroke: 1px rgb(233, 162, 47);
+}
+
+.progress {
+  width: 0;
+  height: 5px;
+  background-color: rgb(233, 162, 47);
+  border-radius: 5px;
 }
