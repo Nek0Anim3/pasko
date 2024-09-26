@@ -3,10 +3,12 @@
 import Image from "next/image"
 import styles from './Header.module.css'
 import { Grid2 } from "@mui/material"
-import { styled } from '@mui/material/styles'
+import { easing, styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import useUserStore from "@/src/Store/userStore"
 import abbreviateNumber from "@/src/utils/abbreviateNumber"
+import { useEffect } from "react"
+import gsap from "gsap"
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -28,6 +30,10 @@ const Item = styled(Paper)(({ theme }) => ({
 const Header = () => {
   const { userData, photoUrl } = useUserStore(); // состояние и метод для обновления состояния
   // Если данные еще загружаются, возвращаем состояние загрузки
+
+  useEffect(() => {
+    gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut"}) //нихуёво да (спиздил у хомяка)
+  },[])
 
   return (
     <header className={styles.header}>
@@ -60,25 +66,25 @@ const Header = () => {
         </div>
         <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid2 size={6}>
-            <Item>
+            <Item className="userInfoCard">
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
               <h3>{abbreviateNumber(userData.user.income)} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
-            <Item>
+            <Item className="userInfoCard">
               <Image src={'/invite.svg'} width={22} height={22}></Image>
               <h3>{userData.user.friendsInvited}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
-            <Item>
+            <Item className="userInfoCard">
               <Image src={'/pertap.svg'} width={22} height={22}></Image>
               <h3>+{abbreviateNumber(userData.user.pointsPerTap)}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
-            <Item>
+            <Item className="userInfoCard">
               <Image src={'/paskocoin.png'} width={22} height={22}></Image>
               <h3>{abbreviateNumber(userData.user.points)}</h3>
             </Item>
