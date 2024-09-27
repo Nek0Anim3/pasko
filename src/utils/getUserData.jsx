@@ -34,7 +34,7 @@ async function DbFetch(initData) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uid: initData.user.id, firstName: initData.user.first_name }),
+      body: JSON.stringify({ uid: initData.user.id, firstName: initData.user.firstName }),
     }),
     fetch("api/avatar", {
       method: "POST",
