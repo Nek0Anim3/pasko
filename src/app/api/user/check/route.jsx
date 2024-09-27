@@ -17,6 +17,7 @@ export async function POST(req) {
         uid,                    // ID аккаунта Telegram
         firstName: firstName,
         points: 0,              // Начальные очки
+        maxPoints: 0,
         pointsPerTap: 1,
         income: 0,              // Часовой доход очков
         friendsInvited: 0,
@@ -40,6 +41,7 @@ export async function POST(req) {
 
     const additionalPoints = hoursPassed * user.income;
     user.points += additionalPoints;
+    user.maxPoints += additionalPoints;
     user.lastUpdated = currentTime;
 
     // Обновляем данные пользователя в базе

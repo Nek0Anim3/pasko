@@ -3,7 +3,7 @@ import { connectToDatabase } from '@/src/lib/db'; // Подключение к M
 
 export async function PUT(req) {
   try {
-    const { uid, points, pointsPerTap, income, friendsInvited, level, upgrades } = await req.json();
+    const { uid, points, maxPoints, pointsPerTap, income, friendsInvited, level, upgrades } = await req.json();
     //console.log(uid)
     const { database } = await connectToDatabase();
 
@@ -20,6 +20,7 @@ export async function PUT(req) {
     // Обновляем данные пользователя
     const updatedUser = {
       ...(points !== undefined && { points }),
+      ...(maxPoints !== undefined && { maxPoints }),
       ...(pointsPerTap !== undefined && { pointsPerTap }),
       ...(income !== undefined && { income }),
       ...(friendsInvited !== undefined && { friendsInvited }),
