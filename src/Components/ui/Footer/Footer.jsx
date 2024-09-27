@@ -35,10 +35,29 @@ const Footer = () => {
       const button = buttonRefs.current[activeButton - 1];
       const buttonRect = button.getBoundingClientRect();
       
-      setIndicatorStyle({
+      gsap.to(".palochka", {
+        duration: 0.1,
+        left: indicatorStyle.left,
+        width: buttonRect.width,
+        onComplete: () => { setIndicatorStyle({left:(indicatorStyle.left+button.offsetLeft)/2}),
+          gsap.to(".palochka", {
+            duration: 0.1,
+            width: buttonRect.width+((Math.max(indicatorStyle.left, button.offsetLeft)-Math.min(indicatorStyle.left, button.offsetLeft))*8),
+            ease: "back.inOut",
+            onComplete: () => {setIndicatorStyle({left:button.offsetLeft}),
+              gsap.to(".palochka", {
+                duration: 0.1,
+                width: buttonRect.width,
+              });
+            },
+          });
+        },
+      });
+
+      /*setIndicatorStyle({
         width: `${buttonRect.width}px`,
         left: `${button.offsetLeft}px`,
-      });
+      });*/
     }
   }, [activeButton]);
 
@@ -95,7 +114,7 @@ const Footer = () => {
           </button>
         </Link>
       </nav>
-      <div className={styles.indicator} style={indicatorStyle} />
+      <div className={`palochka ${styles.indicator}`} style={indicatorStyle} />
     </footer>
 
   );
