@@ -8,7 +8,7 @@ export async function POST(req) {
     const { database } = await connectToDatabase();
 
     // Подключаемся к базе данных
-    console.log("Подключение к базе данных установлено.");
+    //console.log("Подключение к базе данных установлено.");
 
     // Проверяем, есть ли пользователь с таким uid
     let user = await database.collection("users").findOne({ uid });

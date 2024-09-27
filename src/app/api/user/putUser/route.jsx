@@ -4,11 +4,11 @@ import { connectToDatabase } from '@/src/lib/db'; // Подключение к M
 export async function PUT(req) {
   try {
     const { uid, points, pointsPerTap, income, friendsInvited, level, upgrades } = await req.json();
-    console.log(uid)
+    //console.log(uid)
     const { database } = await connectToDatabase();
 
     // Подключаемся к базе данных
-    console.log("Подключение к базе данных установлено.");
+    //console.log("Подключение к базе данных установлено.");
 
     // Находим пользователя по uid
     const user = await database.collection("users").findOne({ uid });

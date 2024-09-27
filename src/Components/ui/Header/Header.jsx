@@ -12,6 +12,7 @@ import gsap from "gsap"
 import useLoadingStore from "@/src/Store/loadingStore"
 import { TextPlugin } from "gsap/all"
 import dynamic from 'next/dynamic';
+import ScoreUpdater from "../ScoreUpdater/ScoreUpdater"
 
 const OdometerComponent = dynamic(() => import('@/src/Components/ui/OdometerComponent/OdometerComponent'), { ssr: false });
 
@@ -85,7 +86,7 @@ const Header = () => {
           <Grid2 size={6}>
             <Item className="userInfoCard">
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
-              <h3>{abbreviateNumber(userData.user.income).value} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
+              <h3>{abbreviateNumber(userData.user.income).value}{abbreviateNumber(userData.user.income).suffix} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
@@ -111,7 +112,7 @@ const Header = () => {
 
       </div>
 
-      
+      <ScoreUpdater /> {/*Обновления очков от дохода в час*/}
     </header>
   )
 }

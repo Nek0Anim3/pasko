@@ -29,7 +29,7 @@ export default function Farm() {
       id: Date.now(),
       x: buttonCenterX + offsetX, 
       y: buttonCenterY + offsetY, 
-      text: `+${abbreviateNumber(userData.user.pointsPerTap)}`
+      text: `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`
     };
 
     setEffects((prevEffects) => [...prevEffects, newEffect]);
