@@ -21,6 +21,7 @@ const Loader = () => {
       const data = await getUserData();
       if (data) {
         const { initData, user, avatarUrl, isNew } = data;
+        console.log(initData)
         setNewUser(isNew || false);
         setUser({ user, tgUser: initData.user }, avatarUrl);
         setIsFetched(true); // Устанавливаем флаг, что запрос выполнен
