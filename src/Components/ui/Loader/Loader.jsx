@@ -66,8 +66,8 @@ const Loader = () => {
         duration: 0.2,
         delay: 0.4,
         ease: "power1.in",
-        display: "none",
-        onComplete: () => setLoading(false)  // Устанавливаем isLoading = false после завершения анимации
+        zIndex: -1,
+        onStart: () => setLoading(false)  // Устанавливаем isLoading = false после завершения анимации
       });
     }
 
