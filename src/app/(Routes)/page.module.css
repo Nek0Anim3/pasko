@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   user-select: none;
+  justify-content: center;
 }
 
 .tapbutton {
@@ -50,4 +51,24 @@
 
 .paskoimage{
   pointer-events: none;
+}
+
+.lvlcontainer {
+  display: flex;
+  
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lvltext {
+  font-size: 3vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.actualPoints {
+  font-size: 7vh;
+  text-align: center;
 }

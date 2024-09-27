@@ -7,8 +7,40 @@ import { useState, useEffect } from "react"
 import abbreviateNumber from "@/src/utils/abbreviateNumber";
 import useLoadingStore from "@/src/Store/loadingStore";
 import gsap from "gsap";
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+
 
 export default function Farm() {
+  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 8,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: '#2b2727',
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#2b2727',
+      }),
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 5,
+      backgroundColor: '#fff',
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#fff',
+      }),
+    },
+  }));
+
+
+
+
+
+
+
+
+
+
   const { userData, updateUserData } = useUserStore(); // состояние и метод для обновления состояния
 
   const [clickTimeout, setClickTimeout] = useState(null); // Для хранения таймера
@@ -107,8 +139,14 @@ export default function Farm() {
     <div className={`coin ${styles.clickerContent}`}>
       <div className={styles.clickerContaienr}>
         <div className={styles.lvlContainer}>
-          <div className={styles.lvl}></div>
+          <div className={styles.lvltext}>
+            <div className={styles.lvl}>LVL 1</div>
+            <div className={styles.lvl}>10%</div>
+          </div>
+          <BorderLinearProgress variant="determinate" value={25} />
+          <div className={styles.actualPoints}>{/*ВЫДУМАЙ КАК ОТЕТО ПРИВЯЗАТЬ, А ТО userData.user.points не канает (null)*/}20,000,000</div>
         </div>
+
         <div className={styles.buttonContainer}>
           <div className={styles.clickArea} onClick={handleClick}>
               {effects.map(effect => (
