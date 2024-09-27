@@ -9,35 +9,24 @@ export const getUserData = async () => {
       throw new Error('Not in Telegram');
     } 
 
-    const {user, avatarUrl,isNew} = await DbFetch(initData)
 
-    return {
-      initData,
-      user,
-      avatarUrl,
-      isNew
-    };
+    console.lot(initDataRaw)
+    return await DbFetch(initData);
   } catch (error) {
-    //Факе юзер
+    // Возвращаем фейковые данные
     const fakeUser = {
       id: 1277009903,
-      username: "Cenaure"
-    }
-    
+      firstName: "Cenaure"
+    };
+
     const initData = {
       user: fakeUser
-    }
-
-    const {user, avatarUrl, isNew} = await DbFetch(initData)
-
-    return {
-      initData,
-      user,
-      avatarUrl,
-      isNew
     };
+
+    return await DbFetch(initData); // Используем DbFetch один раз
   }
 };
+
 
 // Запрос на получение данных пользователя
 async function DbFetch(initData) {
@@ -47,7 +36,7 @@ async function DbFetch(initData) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uid: initData.user.id }),
+      body: JSON.stringify({ uid: initData.user.id, firstName: initData.user.firstName }),
     }),
     fetch("api/avatar", {
       method: "POST",
@@ -65,5 +54,5 @@ async function DbFetch(initData) {
   const { user, new: isNew } = await dbResponse.json(); // Получаем флаг `new`
   const { avatarUrl } = await avatarResponse.json();
 
-  return { user, avatarUrl, isNew };
+  return { initData, user, avatarUrl, isNew };
 }

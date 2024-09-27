@@ -3,7 +3,7 @@ import { connectToDatabase } from '@/src/lib/db'; // подключение к M
 
 export async function POST(req) {
   try {
-    const { uid } = await req.json();
+    const { uid, firstName } = await req.json();
 
     const { database } = await connectToDatabase();
 
@@ -17,6 +17,7 @@ export async function POST(req) {
       // Если пользователь не найден, создаем нового пользователя
       const newUser = {
         uid,           // ID аккаунта Telegram
+        firstName: firstName,
         points: 0,     // Начальные очки
         pointsPerTap: 1,
         income: 0,

@@ -5,6 +5,8 @@ import styles from "./page.module.css"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import abbreviateNumber from "@/src/utils/abbreviateNumber";
+import useLoadingStore from "@/src/Store/loadingStore";
+import gsap from "gsap";
 
 export default function Farm() {
   const { userData, updateUserData } = useUserStore(); // состояние и метод для обновления состояния
@@ -88,8 +90,21 @@ export default function Farm() {
     setSize(initialSize);
   };
 
+  //Анимация монетки
+  const {isLoadingAnim} = useLoadingStore();
+
+  useEffect(() => {
+    function animate () {
+      const timeline = gsap.timeline()
+
+      timeline.fromTo(".coin", {scale: 0}, {scale: 1, ease: "expo.inOut"})
+    }
+
+    if(!isLoadingAnim) animate()
+  }, [isLoadingAnim])
+
   return  (
-    <div className={styles.clickerContent}>
+    <div className={`coin ${styles.clickerContent}`}>
       <div className={styles.clickerContaienr}>
         <div className={styles.lvlContainer}>
           <div className={styles.lvl}></div>

@@ -8,21 +8,26 @@ import { getUserData } from "@/src/utils/getUserData"
 import useLoadingStore from "@/src/Store/loadingStore"
 
 const Loader = () => {
+  console.log("Компонент Loader монтируется");
   const {isLoading, setUser} = useUserStore()
   const {setLoading} = useLoadingStore()
   const [newUser, setNewUser] = useState()
+  const [isFetched, setIsFetched] = useState(false); // Флаг для отслеживания выполнения запроса
 
   useEffect(() => {
+    if (isFetched) return; // Если данные уже были загружены, запрос не выполняется
+
     const fetchUser = async () => {
       const data = await getUserData();
       if (data) {
         const { initData, user, avatarUrl, isNew } = data;
-        setNewUser(isNew || false)
+        setNewUser(isNew || false);
         setUser({ user, tgUser: initData.user }, avatarUrl);
+        setIsFetched(true); // Устанавливаем флаг, что запрос выполнен
       }
     };
     fetchUser();
-  }, [setUser]);
+  }, [isFetched]);
 
   useEffect(() => {
     function animate() {
