@@ -6,17 +6,27 @@ import { useEffect, useState } from "react"
 import useUserStore from "@/src/Store/userStore"
 import { getUserData } from "@/src/utils/getUserData"
 import useLoadingStore from "@/src/Store/loadingStore"
+import { initMiniApp } from '@telegram-apps/sdk';
 
 const Loader = () => {
-  console.log("Компонент Loader монтируется");
+  const [miniApp, setMiniApp] = useState(null);
   const {isLoading, setUser} = useUserStore()
   const {setLoading} = useLoadingStore()
   const [newUser, setNewUser] = useState()
-  const [isFetched, setIsFetched] = useState(false); // Флаг для отслеживания выполнения запроса
 
   useEffect(() => {
-    if (isFetched) return; // Если данные уже были загружены, запрос не выполняется
+    const initializeMiniApp = async () => {
+      try {
+        const app = await initMiniApp();
+        setMiniApp(app);
+      } catch (error) {
+        console.error("Failed to initialize miniApp:", error);
+      }
+    };
+    initializeMiniApp();
+  }, []);
 
+  useEffect(() => {
     const fetchUser = async () => {
       const data = await getUserData();
       if (data) {
@@ -24,11 +34,16 @@ const Loader = () => {
         console.log(initData)
         setNewUser(isNew || false);
         setUser({ user, tgUser: initData.user }, avatarUrl);
-        setIsFetched(true); // Устанавливаем флаг, что запрос выполнен
       }
     };
     fetchUser();
-  }, [isFetched]);
+  }, [setUser]);
+
+  useEffect(() => {
+    if (miniApp) {
+      miniApp.setHeaderColor('#0a0a0a');
+    }
+  }, [miniApp]);
 
   useEffect(() => {
     function animate() {
