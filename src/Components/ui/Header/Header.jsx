@@ -104,8 +104,8 @@ const Header = () => {
           <Grid2 size={6}>
             <Item className="userInfoCard">
               <Image src={'/paskocoin.png'} width={22} height={22} />
-              <OdometerComponent value={abbreviateNumber(userData.user.points).value} />
-              <span>{abbreviateNumber(userData.user.points).suffix}</span>
+              <OdometerComponent value={abbreviateNumber(userData.user.maxPoints).value} />
+              <span>{abbreviateNumber(userData.user.maxPoints).suffix}</span>
             </Item>
           </Grid2>
         </Grid2>

@@ -47,7 +47,7 @@ export async function POST(req) {
     // Обновляем данные пользователя в базе
     await database.collection("users").updateOne(
       { uid },
-      { $set: { points: user.points, lastUpdated: currentTime } }
+      { $set: { points: user.points, maxPoints: user.maxPoints, lastUpdated: currentTime } }
     );
     
     // Возвращаем обновлённые данные пользователя
