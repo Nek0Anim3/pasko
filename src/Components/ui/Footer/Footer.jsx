@@ -14,7 +14,7 @@ const Footer = () => {
     function animate () {
       const timeline = gsap.timeline()
 
-      timeline.fromTo("footer", {bottom: "-50px"}, {bottom: "0", ease: "power2.inOut"})
+      timeline.to("footer", {bottom: "0", ease: "power2.inOut"})
     }
 
     if(!isLoadingAnim) animate()
