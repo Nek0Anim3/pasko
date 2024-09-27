@@ -68,13 +68,15 @@ export default function Farm() {
 
     // Обновляем количество очков пользователя
     const updatedPoints = userData.user.points + (userData.user.pointsPerTap);
+    const updatedMaxPoints = userData.user.maxPoints + (userData.user.pointsPerTap);
     
     // Вызываем метод для обновления состояния
     updateUserData({
       ...userData,
       user: {
         ...userData.user,
-        points: updatedPoints
+        points: updatedPoints,
+        maxPoints: updatedMaxPoints
       }
     });
 
@@ -87,7 +89,17 @@ export default function Farm() {
     const newTimeout = setTimeout(() => {
       // Отправка запроса на сервер
       console.log("Отправка запроса на сервер для обновления данных...");
-      fetch('/api/user/putUser', { method: 'PUT', body: JSON.stringify({uid: userData.user.uid, points: (userData.user.points + userData.user.pointsPerTap)})});
+      fetch('/api/user/putUser', { method: 'PUT', 
+        body: 
+          JSON.stringify(
+            {
+              uid: userData.user.uid, 
+              points: (userData.user.points + userData.user.pointsPerTap), 
+              maxPoints: (userData.user.maxPoints + userData.user.pointsPerTap)
+            }
+          )
+        }
+      );
     }, 1000);
 
     setClickTimeout(newTimeout);

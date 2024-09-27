@@ -3,32 +3,32 @@ import useUserStore from '@/src/Store/userStore';
 
 const ScoreUpdater = () => {
   const { userData, updateUserData } = useUserStore();
-  const pointsRef = useRef(userData.user.points); // Храним очки в рефе
+  const pointsRef = useRef(userData.user.points);
+  const maxPointsRef = useRef(userData.user.maxPoints);
 
   useEffect(() => {
-    // Доход в секунду = доход в час / 3600 секунд
     const incomePerSecond = userData.user.income / 3600;
 
+    // Синхронизируем рефы с пользовательскими данными
+    pointsRef.current = userData.user.points;
+    maxPointsRef.current = userData.user.maxPoints;
+
     const interval = setInterval(() => {
-      // Увеличиваем очки на доход в секунду
       pointsRef.current += incomePerSecond;
+      maxPointsRef.current += incomePerSecond;
 
       updateUserData({
         ...userData,
         user: {
           ...userData.user,
-          points: pointsRef.current // Обновляем очки из рефа
-        }
+          points: pointsRef.current,
+          maxPoints: maxPointsRef.current,
+        },
       });
-    }, 1000); // Обновляем каждую секунду
+    }, 1000);
 
-    // Очищаем таймер при размонтировании компонента
     return () => clearInterval(interval);
-  }, [userData.user.income]); // Следим только за изменением дохода
-
-  useEffect(() => {
-    pointsRef.current = userData.user.points; // Синхронизируем реф с очками при их изменении
-  }, [userData.user.points]);
+  }, [userData]); // Следим за изменениями userData
 
   return null; // Этот компонент просто запускает таймер
 };
