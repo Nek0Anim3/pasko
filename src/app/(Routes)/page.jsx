@@ -8,8 +8,6 @@ import abbreviateNumber from "@/src/utils/abbreviateNumber";
 import useLoadingStore from "@/src/Store/loadingStore";
 import gsap from "gsap";
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
 
@@ -32,16 +30,7 @@ export default function Farm() {
     },
   }));
 
-
-
-
-
-
-
-
-
-
-  const { userData, updateUserData } = useUserStore(); // состояние и метод для обновления состояния
+  const { userData, updateUserData, isLoading } = useUserStore(); // состояние и метод для обновления состояния
 
   const [clickTimeout, setClickTimeout] = useState(null); // Для хранения таймера
 
@@ -147,16 +136,18 @@ export default function Farm() {
     if(!isLoadingAnim) animate()
   }, [isLoadingAnim])
 
+  if(isLoading) return <></>
+
   return  (
     <div className={`coin ${styles.clickerContent}`}>
       <div className={styles.clickerContaienr}>
         <div className={styles.lvlContainer}>
           <div className={styles.lvltext}>
-            <div className={styles.lvl}>LVL 1</div>
-            <div className={styles.lvl}>10%</div>
+            <div className={styles.lvl}>LVL {userData.user.level}</div>
+            <div className={styles.lvl}>{(userData.user.maxPoints / ((userData.user.level+1)*1000)).toFixed(2)*100}%</div>
           </div>
-          <BorderLinearProgress variant="determinate" value={25} />
-          <div className={styles.actualPoints}>{/*ВЫДУМАЙ КАК ОТЕТО ПРИВЯЗАТЬ, А ТО userData.user.points не канает (null)*/}20,000,000</div>
+          <BorderLinearProgress variant="determinate" value={(userData.user.maxPoints / ((userData.user.level+1)*1000)).toFixed(2)*100} />
+          <div className={styles.actualPoints}>{abbreviateNumber(userData.user.points).value}{abbreviateNumber(userData.user.points).suffix}</div>
         </div>
 
         <div className={styles.buttonContainer}>
