@@ -6,16 +6,7 @@ import { SDKProvider } from "@telegram-apps/sdk-react";
 import { useEffect, useState } from "react";
 
 const Upgrades = () => {
-  const [isTelegramApp, setIsTelegramApp] = useState(false);
-
-  useEffect(() => {
-    // Проверяем, доступен ли объект Telegram WebApp
-    if (window.Telegram.WebApp) {
-      setIsTelegramApp(true);
-    } else {
-      console.warn("App is running outside of Telegram.");
-    }
-  }, []);
+  const [isTelegramApp, setIsTelegramApp] = useState(true);
 
   return (
     <>
