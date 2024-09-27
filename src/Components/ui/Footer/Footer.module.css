@@ -1,5 +1,7 @@
 .footerContainer {
   display: flex;
+  position: absolute;
+  bottom: 0;
   flex-direction: row;
   gap: 5vw;
   height: 50px;
