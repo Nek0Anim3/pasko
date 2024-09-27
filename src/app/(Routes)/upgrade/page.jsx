@@ -10,7 +10,7 @@ const Upgrades = () => {
 
   useEffect(() => {
     // Проверяем, доступен ли объект Telegram WebApp
-    if (typeof window !== "undefined" && window.Telegram && window.Telegram.WebApp) {
+    if (window.Telegram.WebApp) {
       setIsTelegramApp(true);
     } else {
       console.warn("App is running outside of Telegram.");
