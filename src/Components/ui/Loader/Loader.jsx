@@ -10,13 +10,14 @@ import useLoadingStore from "@/src/Store/loadingStore"
 const Loader = () => {
   const {isLoading, setUser} = useUserStore()
   const {setLoading} = useLoadingStore()
-
+  const [newUser, setNewUser] = useState()
 
   useEffect(() => {
     const fetchUser = async () => {
       const data = await getUserData();
       if (data) {
-        const { initData, user, avatarUrl } = data;
+        const { initData, user, avatarUrl, isNew } = data;
+        setNewUser(isNew || false)
         setUser({ user, tgUser: initData.user }, avatarUrl);
       }
     };
@@ -29,12 +30,14 @@ const Loader = () => {
 
       // Анимация текста и интро
       timeline.to('.textAnim1', { duration: 0.5, opacity: 0, delay: 1 })
-      timeline.fromTo('.introAnim', { top: "-100vh" }, { top: 0, duration: 1, ease: "power4.out" })
-      timeline.to(".mainPart", { zIndex: -1 })
-      timeline.from(".text", { duration: 0.8, skewY: 20, y: 100, x: -200, opacity: 0, ease: "power4.inOut" })
-      timeline.fromTo(".introAnim", { backgroundColor: "white", color: 'black' }, { delay: 1, backgroundColor: "black", color: "white", duration: 1, ease: "power4.inOut" })
-      timeline.to(".text", { duration: 0.8, skewY: -20, y: 100, x: 200, opacity: 0, ease: "power4.inOut" })
-
+       
+      if(newUser) {
+        timeline.fromTo('.introAnim', { top: "-100vh" }, { top: 0, duration: 1, ease: "power4.out" })
+        timeline.to(".mainPart", { zIndex: -1 })
+        timeline.from(".text", { duration: 0.8, skewY: 20, y: 100, x: -200, opacity: 0, ease: "power4.inOut" })
+        timeline.fromTo(".introAnim", { backgroundColor: "white", color: 'black' }, { delay: 1, backgroundColor: "black", color: "white", duration: 1, ease: "power4.inOut" })
+        timeline.to(".text", { duration: 0.8, skewY: -20, y: 100, x: 200, opacity: 0, ease: "power4.inOut" })
+      }
       // Скрываем лоадер по завершению
       timeline.to(".loader", {
         opacity: 0,

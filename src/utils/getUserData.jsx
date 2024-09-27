@@ -9,12 +9,13 @@ export const getUserData = async () => {
       throw new Error('Not in Telegram');
     } 
 
-    const {user, avatarUrl} = await DbFetch(initData)
+    const {user, avatarUrl,isNew} = await DbFetch(initData)
 
     return {
       initData,
       user,
       avatarUrl,
+      isNew
     };
   } catch (error) {
     //Факе юзер
@@ -27,17 +28,18 @@ export const getUserData = async () => {
       user: fakeUser
     }
 
-    const {user, avatarUrl} = await DbFetch(initData)
+    const {user, avatarUrl, isNew} = await DbFetch(initData)
 
     return {
       initData,
       user,
       avatarUrl,
+      isNew
     };
   }
 };
 
-//Запрос на получение данных пользователя
+// Запрос на получение данных пользователя
 async function DbFetch(initData) {
   const [dbResponse, avatarResponse] = await Promise.all([
     fetch("api/user/check", {
@@ -60,8 +62,8 @@ async function DbFetch(initData) {
     throw new Error(`Ошибка запроса: ${dbResponse.status}`);
   }
 
-  const { user } = await dbResponse.json();
+  const { user, new: isNew } = await dbResponse.json(); // Получаем флаг `new`
   const { avatarUrl } = await avatarResponse.json();
 
-  return {user, avatarUrl}
+  return { user, avatarUrl, isNew };
 }

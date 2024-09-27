@@ -29,11 +29,11 @@ export async function POST(req) {
       await database.collection("users").insertOne(newUser);
 
       // Возвращаем успешный ответ
-      return NextResponse.json({ user: newUser });
+      return NextResponse.json({ user: newUser, new: true });
     }
 
     // Если пользователь найден, возвращаем его данные
-    return NextResponse.json({ user });
+    return NextResponse.json({ user, new: false });
 
   } catch (error) {
     console.error('Error:', error);
