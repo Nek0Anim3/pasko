@@ -3,14 +3,17 @@
 import Image from "next/image"
 import styles from './Header.module.css'
 import { Grid2 } from "@mui/material"
-import { easing, styled } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import useUserStore from "@/src/Store/userStore"
 import abbreviateNumber from "@/src/utils/abbreviateNumber"
 import { useEffect } from "react"
 import gsap from "gsap"
 import useLoadingStore from "@/src/Store/loadingStore"
+import { TextPlugin } from "gsap/all"
+import dynamic from 'next/dynamic';
 
+const OdometerComponent = dynamic(() => import('@/src/Components/ui/OdometerComponent/OdometerComponent'), { ssr: false });
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#2b2727',
@@ -42,6 +45,10 @@ const Header = () => {
     if(!isLoadingAnim) animate()
     
   },[isLoadingAnim])
+
+  useEffect(() => {
+    gsap.registerPlugin(TextPlugin)
+  }, [])
 
   if(isLoading) return <></>
 
@@ -78,7 +85,7 @@ const Header = () => {
           <Grid2 size={6}>
             <Item className="userInfoCard">
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
-              <h3>{abbreviateNumber(userData.user.income)} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
+              <h3>{abbreviateNumber(userData.user.income).value} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
@@ -90,13 +97,14 @@ const Header = () => {
           <Grid2 size={6}>
             <Item className="userInfoCard">
               <Image src={'/pertap.svg'} width={22} height={22}></Image>
-              <h3>+{abbreviateNumber(userData.user.pointsPerTap)}</h3> {/* MongoDB */}
+              <h3>+{abbreviateNumber(userData.user.pointsPerTap).value}</h3> {/* MongoDB */}
             </Item>
           </Grid2>
           <Grid2 size={6}>
             <Item className="userInfoCard">
-              <Image src={'/paskocoin.png'} width={22} height={22}></Image>
-              <h3>{abbreviateNumber(userData.user.points)}</h3>
+              <Image src={'/paskocoin.png'} width={22} height={22} />
+              <OdometerComponent value={abbreviateNumber(userData.user.points).value} />
+              <span>{abbreviateNumber(userData.user.points).suffix}</span>
             </Item>
           </Grid2>
         </Grid2>

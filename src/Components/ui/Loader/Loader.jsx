@@ -70,7 +70,7 @@ const Loader = () => {
         display: "none",
         onStart: () => setLoading(false)
       });
-      timeline.to(".loader", {display: "none"})
+      //timeline.to(".loader", {display: "none"})
     }
 
     if (!isLoading) animate()

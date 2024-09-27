@@ -1,0 +1,4 @@
+.odometer.odometer-animating-up .odometer-ribbon-inner,
+.odometer.odometer-animating-down .odometer-ribbon-inner {
+  transition: transform 1ms !important; /* Установите здесь желаемую продолжительность анимации */
+}

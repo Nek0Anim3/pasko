@@ -53,3 +53,8 @@ footer {
   bottom: 0;
   position: fixed;
 }
+
+.odometer.odometer-animating-up .odometer-ribbon-inner,
+.odometer.odometer-animating-down .odometer-ribbon-inner {
+  transition: transform 0.1s !important; /* Установите здесь желаемую продолжительность анимации */
+}
