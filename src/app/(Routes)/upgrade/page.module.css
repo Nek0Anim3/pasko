@@ -6,7 +6,10 @@
   border-radius: 50px;
   display: flex;
   z-index: -1;
-  background-color: #252323;
   padding: 20px;
   justify-content: center;
+}
+
+.title{
+  font-family: "Monument";
 }

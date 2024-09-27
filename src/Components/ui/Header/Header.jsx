@@ -86,7 +86,7 @@ const Header = () => {
                 }}
               /> // Заглушка для аватара
             )}
-            <h1>{userData?.tgUser?.firstName || 'Guest'}</h1> {/**/}
+            <h1 style={{fontWeight: 100}}>{userData?.tgUser?.firstName || 'Guest'}</h1> {/**/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>

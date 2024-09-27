@@ -9,6 +9,8 @@ import useLoadingStore from "@/src/Store/loadingStore";
 import gsap from "gsap";
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import LevelUpdater from "@/src/Components/ui/LevelUpdater/LevelUpdater";
+import CalculateLevel from "@/src/Components/ui/LevelUpdater/Level/Calculate";
 
 export default function Farm() {
 
@@ -139,34 +141,38 @@ export default function Farm() {
   if(isLoading) return <></>
 
   return  (
-    <div className={`coin ${styles.clickerContent}`}>
-      <div className={styles.clickerContaienr}>
-        <div className={styles.lvlContainer}>
-          <div className={styles.lvltext}>
-            <div className={styles.lvl}>LVL {userData.user.level}</div>
-            <div className={styles.lvl}>{Math.floor(userData.user.maxPoints / ((userData.user.level+1)*1000)*100)}%</div>
+    <>
+      <div className={`coin ${styles.clickerContent}`}>
+        <div className={styles.clickerContaienr}>
+          <div className={styles.lvlContainer}>
+            <div className={styles.lvltext}>
+              <div className={styles.lvl}>LVL {userData.user.level}</div>
+              <div className={styles.lvl}>{CalculateLevel(userData.user.level, userData.user.maxPoints)}%</div>
+            </div>
+            <BorderLinearProgress variant="determinate" value={CalculateLevel(userData.user.level, userData.user.maxPoints)} />
+            <div className={styles.actualPoints}>{abbreviateNumber(userData.user.points).value}{abbreviateNumber(userData.user.points).suffix}</div>
           </div>
-          <BorderLinearProgress variant="determinate" value={(userData.user.maxPoints / ((userData.user.level+1)*1000)).toFixed(2)*100} />
-          <div className={styles.actualPoints}>{abbreviateNumber(userData.user.points).value}{abbreviateNumber(userData.user.points).suffix}</div>
-        </div>
 
-        <div className={styles.buttonContainer}>
-          <div className={styles.clickArea} onClick={handleClick}>
-              {effects.map(effect => (
-                <span
-                  key={effect.id}
-                  className={styles.tapEffect}
-                  style={{ left: effect.x, top: effect.y }}
-                >
-                  {effect.text}
-                </span>
-              ))}
-              <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
-                <Image className={styles.paskoimage} src={'/paskocoin.png'/*Єх вотбі оні мінялісь*/} width={size.width} height={size.height} alt="pasko"></Image>
-              </button>
+          <div className={styles.buttonContainer}>
+            <div className={styles.clickArea} onClick={handleClick}>
+                {effects.map(effect => (
+                  <span
+                    key={effect.id}
+                    className={styles.tapEffect}
+                    style={{ left: effect.x, top: effect.y }}
+                  >
+                    {effect.text}
+                  </span>
+                ))}
+                <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
+                  <Image className={styles.paskoimage} src={'/paskocoin.png'/*Єх вотбі оні мінялісь*/} width={size.width} height={size.height} alt="pasko"></Image>
+                </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <LevelUpdater />
+    </>
   )
 }
