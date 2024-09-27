@@ -67,8 +67,8 @@ const Loader = () => {
         delay: 0.4,
         ease: "power1.in",
         zIndex: -1,
-        onStart: () => setLoading(false)  // Устанавливаем isLoading = false после завершения анимации
       });
+      timeline.to(".loader", {display: "none", onStart: () => setLoading(false)})
     }
 
     if (!isLoading) animate()
@@ -81,7 +81,7 @@ const Loader = () => {
       <div className={`loader ${styles.loader}`}>
         <div className={`mainPart ${styles.animation}`}>
           <h1 className={`textAnim1 ${styles.loadingText}`}>LOADING</h1>
-          <div className={`progress ${styles.progress}`}></div> {/* Прогресс бар */}
+          {/*<div className={`progress ${styles.progress}`}></div>  Прогресс бар */}
         </div>
         <div className={`introAnim ${styles.intro}`}>
           <p className="text">HuetaXColhoz</p>
