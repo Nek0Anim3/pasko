@@ -67,8 +67,9 @@ const Loader = () => {
         delay: 0.4,
         ease: "power1.in",
         zIndex: -1,
+        onStart: () => setLoading(false)
       });
-      timeline.to(".loader", {display: "none", onStart: () => setLoading(false)})
+      timeline.to(".loader", {display: "none"})
     }
 
     if (!isLoading) animate()
