@@ -16,9 +16,18 @@
   background-color: #141212;
   border: none;
   height: 100%;
-  transition-duration: 100ms;
+  transition: all 100ms ease-in-out;
 }
 
-.footerButton.active {
-  background-color: #302c2c;
+
+
+.indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 15vw;
+  background-color: #ffffff;
+  transition: left 0.4s ease, width 0.2s ease-in-out;
+  border-radius: 20vw;
 }
