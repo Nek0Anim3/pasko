@@ -19,6 +19,7 @@ const Loader = () => {
       try {
         const app = await initMiniApp();
         setMiniApp(app);
+        console.log(app)
       } catch (error) {
         console.error("Failed to initialize miniApp:", error);
       }
