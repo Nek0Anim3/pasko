@@ -1,17 +1,15 @@
 "use client";
 
 import { Typography } from "@mui/material";
-
+import styles from './page.module.css'
 
 const Upgrades = () => {
-  //const [isTelegramApp, setIsTelegramApp] = useState(true);
+
 
   return (
-    <>
-
-      <Typography variant="h3" component="p">Coming soon!</Typography>
-
-    </>
+    <div className={styles.upgradesPageContainer}>
+        <Typography variant="h2" component="h1">Upgrades</Typography>
+    </div>
   );
 };
 

@@ -10,8 +10,8 @@ import gsap from "gsap";
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
-
 export default function Farm() {
+
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 8,
     borderRadius: 5,
@@ -144,7 +144,7 @@ export default function Farm() {
         <div className={styles.lvlContainer}>
           <div className={styles.lvltext}>
             <div className={styles.lvl}>LVL {userData.user.level}</div>
-            <div className={styles.lvl}>{(userData.user.maxPoints / ((userData.user.level+1)*1000)).toFixed(2)*100}%</div>
+            <div className={styles.lvl}>{Math.floor(userData.user.maxPoints / ((userData.user.level+1)*1000)*100)}%</div>
           </div>
           <BorderLinearProgress variant="determinate" value={(userData.user.maxPoints / ((userData.user.level+1)*1000)).toFixed(2)*100} />
           <div className={styles.actualPoints}>{abbreviateNumber(userData.user.points).value}{abbreviateNumber(userData.user.points).suffix}</div>

@@ -13,6 +13,7 @@ import useLoadingStore from "@/src/Store/loadingStore"
 import { TextPlugin } from "gsap/all"
 import dynamic from 'next/dynamic';
 import ScoreUpdater from "../ScoreUpdater/ScoreUpdater"
+import { usePathname } from "next/navigation"
 
 const OdometerComponent = dynamic(() => import('@/src/Components/ui/OdometerComponent/OdometerComponent'), { ssr: false });
 
@@ -33,23 +34,31 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Header = () => {
+  const pathname = usePathname()
   const { userData, photoUrl, isLoading } = useUserStore(); // состояние и метод для обновления состояния
   // Если данные еще загружаются, возвращаем состояние загрузки
   const {isLoadingAnim} = useLoadingStore()
 
   useEffect(() => {
     function animate () {
-      gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
+      if(pathname == "/") gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
       gsap.fromTo("header", {y: -200}, {y: 0, duration: 0.5, ease: "power4.out"}) //нихуёво да (спиздил у хомяка)
     }
 
     if(!isLoadingAnim) animate()
-    
   },[isLoadingAnim])
 
   useEffect(() => {
     gsap.registerPlugin(TextPlugin)
   }, [])
+
+  useEffect(() => {
+    if(pathname == "/upgrade") {
+      gsap.to(".userInfoCard", {scale: 0, duration: 0.5, ease: "expo.inOut", delay: .2})
+    } else if (pathname == "/") {
+      gsap.to(".userInfoCard", {scale: 1, duration: 0.5, ease: "expo.inOut"})
+    }
+  }, [pathname, isLoadingAnim])
 
   if(isLoading) return <></>
 
