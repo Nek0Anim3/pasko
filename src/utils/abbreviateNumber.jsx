@@ -8,5 +8,5 @@ export default function abbreviateNumber(number) {
   const scale = Math.pow(10, tier * 3);
   const scaled = number / scale;
 
-  return { value: scaled.toFixed(1), suffix };
+  return { value: scaled.toFixed(2), suffix };
 }
