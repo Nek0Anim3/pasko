@@ -17,7 +17,7 @@ const Loader = () => {
   useEffect(() => {
     const initializeMiniApp = async () => {
       try {
-        const app = await initMiniApp();
+        const app = await initMiniApp()[0];
         setMiniApp(app);
         console.log(app)
       } catch (error) {
