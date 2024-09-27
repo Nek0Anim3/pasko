@@ -35,7 +35,7 @@ const Loader = () => {
         timeline.fromTo('.introAnim', { top: "-100vh" }, { top: 0, duration: 1, ease: "power4.out" })
         timeline.to(".mainPart", { zIndex: -1 })
         timeline.from(".text", { duration: 0.8, skewY: 20, y: 100, x: -200, opacity: 0, ease: "power4.inOut" })
-        timeline.fromTo(".introAnim", { backgroundColor: "white", color: 'black' }, { delay: 1, backgroundColor: "black", color: "white", duration: 1, ease: "power4.inOut" })
+        timeline.fromTo(".introAnim", { backgroundColor: "white", color: 'black' }, { delay: 1, backgroundColor: "#0a0a0a", color: "white", duration: 1, ease: "power4.inOut" })
         timeline.to(".text", { duration: 0.8, skewY: -20, y: 100, x: 200, opacity: 0, ease: "power4.inOut" })
       }
       // Скрываем лоадер по завершению

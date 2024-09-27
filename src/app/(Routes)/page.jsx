@@ -106,7 +106,7 @@ export default function Farm() {
                 </span>
               ))}
               <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
-                <Image className={styles.paskoimage} src={'/paskocoin.png'/*Єх вотбі оні мінялісь*/} width={size.width} height={size.height}></Image>
+                <Image className={styles.paskoimage} src={'/paskocoin.png'/*Єх вотбі оні мінялісь*/} width={size.width} height={size.height} alt="pasko"></Image>
               </button>
           </div>
         </div>
