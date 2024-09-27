@@ -9,8 +9,6 @@ export const getUserData = async () => {
       throw new Error('Not in Telegram');
     } 
 
-
-    console.lot(initDataRaw)
     return await DbFetch(initData);
   } catch (error) {
     // Возвращаем фейковые данные
@@ -36,7 +34,7 @@ async function DbFetch(initData) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uid: initData.user.id, firstName: initData.user.firstName }),
+      body: JSON.stringify({ uid: initData.user.id, firstName: initData.user.first_name }),
     }),
     fetch("api/avatar", {
       method: "POST",
