@@ -18,7 +18,6 @@ const OdometerComponent = ({ value }) => {
           format: '(,ddd).dd', // Добавьте здесь формат с десятичными числами
         });
       }
-      console.log(value);
       // Обновляем значение одометра
       odometerInstance.current.update(value);
     }
