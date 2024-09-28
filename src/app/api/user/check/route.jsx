@@ -22,9 +22,20 @@ export async function POST(req) {
         income: 0,              // Часовой доход очков
         friendsInvited: 0,
         level: 0,
+        avatarUrl: "",
         upgrades: [],
         lastUpdated: currentTime // Устанавливаем время последнего обновления на текущий момент
       };
+
+      const avatarResponse = await fetch("https://paskocoin.vercel.app/api/avatar", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ uid }),
+      });
+      const avatarData = await avatarResponse.json();
+      newUser.avatarUrl = avatarData.avatarUrl;      
 
       // Сохраняем нового пользователя
       await database.collection("users").insertOne(newUser);
