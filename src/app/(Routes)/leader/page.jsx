@@ -14,7 +14,7 @@ const Leaderboard = () => {
   // Fetch leaderboard data when the component mounts
   useEffect(() => {
     const fetchLeaderboardData = async () => {
-      const response = await fetch(`https://paskocoin.vercel.app/api/user/getall`, { cache: 'no-store' });
+      const response = await fetch(`https://paskocoin.vercel.app/api/user/getall`, { cache: 'reload' });
       const data = await response.json();
 
       // Ensure leaderboardData is an array
