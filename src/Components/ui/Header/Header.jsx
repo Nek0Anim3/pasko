@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import useUserStore from "@/src/Store/userStore"
 import abbreviateNumber from "@/src/utils/abbreviateNumber"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import useLoadingStore from "@/src/Store/loadingStore"
 import { TextPlugin } from "gsap/all"
@@ -35,37 +35,41 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Header = () => {
+  const headerRef = useRef()
   const pathname = usePathname()
   const { userData, photoUrl, isLoading } = useUserStore(); // состояние и метод для обновления состояния
   // Если данные еще загружаются, возвращаем состояние загрузки
   const {isLoadingAnim} = useLoadingStore()
 
   useEffect(() => {
-    function animate () {
-      if(pathname == "/") gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
-      gsap.fromTo("header", {y: -200}, {y: 0, duration: 0.5, ease: "power4.out"}) //нихуёво да (спиздил у хомяка)
-    }
-
-    if(!isLoadingAnim) animate()
-  },[isLoadingAnim])
-
-  useEffect(() => {
     gsap.registerPlugin(TextPlugin)
   }, [])
 
   useEffect(() => {
+    function animate () {
+      console.log(1)
+      gsap.fromTo(headerRef.current, {y: -400}, {y: 0, duration: 0.5, ease: "power4.out", delay: .1}) //нихуёво да (спиздил у хомяка)
+      gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
+    }
+
+    if(!isLoadingAnim) animate()
+  }, [isLoadingAnim])
+
+
+  useEffect(() => {
     const timeline = gsap.timeline()
     if(pathname == "/upgrade") {
-      timeline.to("header", {y: -300, duration: .1})
+      timeline.to("header", {y: -300, duration: 0.5})
     } else if (pathname == "/") {
-      timeline.to("header", {y: 0, duration: .1})
+      timeline.to("header", {y: 0, duration: 0.5})
     }
   }, [pathname, isLoadingAnim])
+
 
   if(isLoading) return <></>
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} ref={headerRef}>
       <div className={styles.statsContainer}>
         <div className={styles.userInfo}>
           <div className={styles.user}>

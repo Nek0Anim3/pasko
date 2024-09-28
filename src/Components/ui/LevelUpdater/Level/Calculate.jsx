@@ -12,8 +12,6 @@ export default function CalculateLevel(currLevel, maxPoints) {
   
   //на рандом набубенил надеюсь стабильно
 
-  console.log(nextLevelPoints)
-
   // Рассчитываем прогресс как процент от следующего уровня
   const progressPercentage = Math.floor((maxPoints / nextLevelPoints) * 100);
 
