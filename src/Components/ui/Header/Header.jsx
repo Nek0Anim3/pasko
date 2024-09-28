@@ -14,6 +14,7 @@ import { TextPlugin } from "gsap/all"
 import dynamic from 'next/dynamic';
 import ScoreUpdater from "../ScoreUpdater/ScoreUpdater"
 import { usePathname } from "next/navigation"
+import ScrollNickname from '../ScrollNickname/ScrollNickname'
 
 const OdometerComponent = dynamic(() => import('@/src/Components/ui/OdometerComponent/OdometerComponent'), { ssr: false });
 
@@ -86,7 +87,7 @@ const Header = () => {
                 }}
               /> // Заглушка для аватара
             )}
-            <h1 style={{fontWeight: 100}}>{userData?.tgUser?.firstName || 'Guest'}</h1> {/**/}
+            <ScrollNickname nick={'NekoAnimeeeeeeeeeeeeee'}></ScrollNickname>                         {/*<h1 style={{fontWeight: 100}}>{userData?.tgUser?.firstName || 'Guest'}</h1>   {userData?.tgUser?.firstName || 'Guest'}*/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>

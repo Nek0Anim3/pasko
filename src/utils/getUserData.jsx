@@ -13,8 +13,8 @@ export const getUserData = async () => {
   } catch (error) {
     // Возвращаем фейковые данные
     const fakeUser = {
-      id: 1277009903,
-      firstName: "Cenaure"
+      id: 1002510359,
+      firstName: "NekoAnime"
     };
 
     const initData = {
