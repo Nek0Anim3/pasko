@@ -46,7 +46,6 @@ const PaskoCoinButton = () => {
   let clickTimeout; // Declare clickTimeout in the outer scope
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    e.preventDefault();
 
     const button = e.currentTarget;
     const buttonRect = button.getBoundingClientRect();
