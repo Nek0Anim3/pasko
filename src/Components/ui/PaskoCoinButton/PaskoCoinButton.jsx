@@ -43,18 +43,19 @@ const PaskoCoinButton = () => {
       })
     });
   };
-
+  let clickTimeout; // Declare clickTimeout in the outer scope
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    e.preventDefault(); // предотвратить поведение по умолчанию
+    e.preventDefault();
 
-    const button = e.currentTarget; // использование currentTarget для доступа к элементу
+    const button = e.currentTarget;
     const buttonRect = button.getBoundingClientRect();
+
+    // Обновление очков
     const touchX = e.touches[0].clientX - buttonRect.left;
     const touchY = e.touches[0].clientY - buttonRect.top;
 
-    // Обновление очков
-    updatePoints();
+    clearTimeout(clickTimeout); // Очистка предыдущего таймера
 
     // Создание текстовой частицы
     Array.from(e.touches).forEach(touch => {
@@ -64,14 +65,19 @@ const PaskoCoinButton = () => {
       createParticle(touchX, touchY, `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`);
     });
 
-      gsap.to(coinRef.current, {
-        scale: 0.96,
-        duration: 0.05,
-        ease: "power1.out",
-        onComplete: () => {
-          gsap.to(coinRef.current, { scale: 1, duration: 0.05, ease: "power1.in" });
-        }
-      });
+    gsap.to(coinRef.current, {
+      scale: 0.96,
+      duration: 0.05,
+      ease: "power1.out",
+      onComplete: () => {
+        gsap.to(coinRef.current, { scale: 1, duration: 0.05, ease: "power1.in" });
+      }
+    });
+
+    // Устанавливаем таймер, который сработает через 1 секунду после последнего клика
+    clickTimeout = setTimeout(() => {
+      updatePoints();
+    }, 1000);
   };
 
   // Анимация монетки при загрузке
