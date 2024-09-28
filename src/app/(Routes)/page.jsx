@@ -2,10 +2,7 @@
 
 import useUserStore from "@/src/Store/userStore";
 import styles from "./page.module.css"
-import { useState, useEffect } from "react"
 import abbreviateNumber from "@/src/utils/abbreviateNumber";
-import useLoadingStore from "@/src/Store/loadingStore";
-import gsap from "gsap";
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import LevelUpdater from "@/src/Components/ui/LevelUpdater/LevelUpdater";
