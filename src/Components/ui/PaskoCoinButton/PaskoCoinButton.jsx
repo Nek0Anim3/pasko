@@ -17,6 +17,7 @@ const PaskoCoinButton = () => {
   const coinRef = useRef(null); // Ref для изображения монеты
   const effectContainerRef = useRef(null); // Ref для контейнера эффекта
 
+  
   // Функция для обновления очков
   const updatePoints = () => {
     const updatedPoints = userData.user.points + userData.user.pointsPerTap;
@@ -81,10 +82,14 @@ const PaskoCoinButton = () => {
 
   // Анимация монетки при загрузке
   useEffect(() => {
-    if (!isLoadingAnim) {
-      gsap.fromTo(coinRef.current, { scale: 0 }, { scale: 1, ease: "expo.inOut" });
+    function animate () {
+      const timeline = gsap.timeline()
+
+      timeline.fromTo(".coin", {scale: 0}, {scale: 1, ease: "expo.inOut"})
     }
-  }, [isLoadingAnim]);
+
+    if(!isLoadingAnim) animate()
+  }, [isLoadingAnim])
 
   return (
     <div className={styles.buttonContainer}>
