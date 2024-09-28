@@ -16,7 +16,7 @@ const PaskoCoinButton = () => {
   const [size, setSize] = useState(initialSize);
   const coinRef = useRef(null); // Ref для изображения монеты
   const canvasRef = useRef(null);
-
+  let clickTimeout;
   
   // Функция для обновления очков
   const updatePoints = () => {
@@ -45,7 +45,7 @@ const PaskoCoinButton = () => {
 
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    let clickTimeout;
+
 
     const button = e.currentTarget;
     const buttonRect = button.getBoundingClientRect();
