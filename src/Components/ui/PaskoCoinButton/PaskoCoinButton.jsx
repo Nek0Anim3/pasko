@@ -19,19 +19,7 @@ const PaskoCoinButton = () => {
   const canvasRef = useRef(null);
   let clickTimeout = useRef(null); // Используем useRef для хранения таймера
 
-  const updatePoints = () => {
-    const updatedPoints = userData.user.points + userData.user.pointsPerTap;
-    const updatedMaxPoints = userData.user.maxPoints + userData.user.pointsPerTap;
-
-    updateUserData({
-      ...userData,
-      user: {
-        ...userData.user,
-        points: updatedPoints,
-        maxPoints: updatedMaxPoints,
-      },
-    });
-
+  const updatePoints = ({updatedPoints, updatedMaxPoints}) => {
     // Отправка обновленных данных на сервер через 1 секунду
     fetch("/api/user/putUser", {
       method: "PUT",
@@ -71,8 +59,20 @@ const PaskoCoinButton = () => {
       },
     });
 
+    let updatedPoints = userData.user.points + userData.user.pointsPerTap;
+    let updatedMaxPoints = userData.user.maxPoints + userData.user.pointsPerTap;
+
+    updateUserData({
+      ...userData,
+      user: {
+        ...userData.user,
+        points: updatedPoints,
+        maxPoints: updatedMaxPoints,
+      },
+    });
+
     clickTimeout.current = setTimeout(() => {
-      updatePoints();
+      updatePoints({updatedPoints, updatedMaxPoints});
     }, 1000);
   };
 
