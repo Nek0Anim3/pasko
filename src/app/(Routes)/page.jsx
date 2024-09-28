@@ -34,19 +34,6 @@ export default function Farm() {
 
   const { userData, isLoading } = useUserStore(); // состояние и метод для обновления состояния
 
-  //Анимация монетки
-  const {isLoadingAnim} = useLoadingStore();
-
-  useEffect(() => {
-    function animate () {
-      const timeline = gsap.timeline()
-
-      timeline.fromTo(".coin", {scale: 0}, {scale: 1, ease: "expo.inOut"})
-    }
-
-    if(!isLoadingAnim) animate()
-  }, [isLoadingAnim])
-
   if(isLoading) return <></>
 
   return  (

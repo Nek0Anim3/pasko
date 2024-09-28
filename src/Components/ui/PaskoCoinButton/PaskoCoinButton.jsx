@@ -7,6 +7,8 @@ const { default: useUserStore } = require("@/src/Store/userStore");
 
 import styles from './PaskoCoinButton.module.css'
 import abbreviateNumber from "@/src/utils/abbreviateNumber";
+import gsap from "gsap";
+import useLoadingStore from "@/src/Store/loadingStore";
 
 const PaskoCoinButton = () => {
   const {userData, updateUserData} = useUserStore()
@@ -98,6 +100,19 @@ const PaskoCoinButton = () => {
       timers.forEach(timer => clearTimeout(timer));
     };
   }, [effects]);
+
+
+  //Анимация монетки
+  const {isLoadingAnim} = useLoadingStore();
+  useEffect(() => {
+    function animate () {
+      const timeline = gsap.timeline()
+
+      timeline.fromTo(".coin", {scale: 0}, {scale: 1, ease: "expo.inOut"})
+    }
+
+    if(!isLoadingAnim) animate()
+  }, [isLoadingAnim])
 
   return(
     <div className={styles.buttonContainer}>
