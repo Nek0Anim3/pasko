@@ -15,7 +15,6 @@ const PaskoCoinButton = () => {
   const initialSize = { width: 300, height: 300 };
   const [size, setSize] = useState(initialSize);
   const coinRef = useRef(null); // Ref для изображения монеты
-  const effectContainerRef = useRef(null); // Ref для контейнера эффекта
   const canvasRef = useRef(null);
 
   
@@ -46,7 +45,6 @@ const PaskoCoinButton = () => {
 
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    e.preventDefault();
 
     const button = e.currentTarget;
     const buttonRect = button.getBoundingClientRect();
