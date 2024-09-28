@@ -87,7 +87,7 @@ const Header = () => {
                 }}
               /> // Заглушка для аватара
             )}
-            <ScrollNickname nick={'NekoAnimeeeeeeeeeeeeee'}></ScrollNickname>                         {/*<h1 style={{fontWeight: 100}}>{userData?.tgUser?.firstName || 'Guest'}</h1>   {userData?.tgUser?.firstName || 'Guest'}*/}
+            <ScrollNickname nick={userData?.tgUser?.firstName || 'Anonymous'}></ScrollNickname>                         {/*<h1 style={{fontWeight: 100}}></h1>   {userData?.tgUser?.firstName || 'Guest'}*/}
           </div>
           <div className={styles.place}>
             <h1>#1</h1>
