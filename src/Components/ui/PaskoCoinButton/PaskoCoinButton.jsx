@@ -16,6 +16,7 @@ const PaskoCoinButton = () => {
   const [size, setSize] = useState(initialSize);
   const coinRef = useRef(null); // Ref для изображения монеты
   const effectContainerRef = useRef(null); // Ref для контейнера эффекта
+  const canvasRef = useRef(null);
 
   
   // Функция для обновления очков
@@ -45,39 +46,32 @@ const PaskoCoinButton = () => {
 
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    const containerRect = effectContainerRef.current.getBoundingClientRect();
-    const buttonRect = coinRef.current.getBoundingClientRect();
+    e.preventDefault(); // предотвратить поведение по умолчанию
 
-    // Определяем координаты нажатия относительно контейнера
-    const touchX = (e.touches?.[0]?.clientX - 0.3 || e.clientX  - 0.3) - containerRect.left;
-    const touchY = (e.touches?.[0]?.clientY || e.clientY) - containerRect.top;
+    const button = e.currentTarget; // использование currentTarget для доступа к элементу
+    const buttonRect = button.getBoundingClientRect();
+    const touchX = e.touches[0].clientX - buttonRect.left;
+    const touchY = e.touches[0].clientY - buttonRect.top;
 
-    // Смещение для эффекта, чтобы он появлялся над кнопкой
-    const offsetY = buttonRect.height * -1.1; // Отрицательное значение для появления выше кнопки
+    // Обновление очков
+    updatePoints();
 
-    // Анимация "+1" в пределах контейнера
-    const effectEl = document.createElement('div');
-    effectEl.innerText = `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`;
-    effectEl.className = styles.tapEffect;
-    effectContainerRef.current.appendChild(effectEl);
-    
-    gsap.fromTo(
-      effectEl,
-      { x: touchX, y: touchY + offsetY, opacity: 1, scale: 0 },
-      { y: touchY + offsetY - 50, scale: 1, opacity: 0, duration: 1.5, ease: "power1.out", onComplete: () => effectEl.remove() }
-    );
-    // Анимация нажатия на монету
-    gsap.to(coinRef.current, {
-      scale: 0.96,
-      duration: 0.05,
-      ease: "power1.out",
-      onComplete: () => {
-        gsap.to(coinRef.current, { scale: 1, duration: 0.05, ease: "power1.in" });
-      }
+    // Создание текстовой частицы
+    Array.from(e.touches).forEach(touch => {
+      const touchX = touch.clientX - buttonRect.left;
+      const touchY = touch.clientY - buttonRect.top;
+
+      createParticle(touchX, touchY, `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`);
     });
 
-    // Обновление очков пользователя
-    updatePoints();
+      gsap.to(coinRef.current, {
+        scale: 0.96,
+        duration: 0.05,
+        ease: "power1.out",
+        onComplete: () => {
+          gsap.to(coinRef.current, { scale: 1, duration: 0.05, ease: "power1.in" });
+        }
+      });
   };
 
   // Анимация монетки при загрузке
@@ -91,16 +85,54 @@ const PaskoCoinButton = () => {
     if(!isLoadingAnim) animate()
   }, [isLoadingAnim])
 
+
+  const createParticle = (x, y, text) => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    // Устанавливаем начальные параметры частицы
+    const particle = {
+      x: x,
+      y: y,
+      text: text,
+      opacity: 1,
+      scale: 1,
+      vy: -1, // скорость по вертикали
+      lifespan: 1000 // продолжительность жизни в мс
+    };
+
+    const drawParticle = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height); // очищаем холст
+
+      // Устанавливаем стиль текста
+      context.font = `${24 * particle.scale}px Arial`;
+      context.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+
+      // Рисуем текст
+      context.fillText(particle.text, particle.x, particle.y);
+
+      // Обновляем параметры частицы
+      particle.y += particle.vy; // движение вверх
+      particle.opacity -= 0.03; // уменьшение непрозрачности
+      particle.scale += 0.005; // увеличение масштаба
+
+      // Если частица исчезает, останавливаем анимацию
+      if (particle.opacity > 0) {
+        requestAnimationFrame(drawParticle);
+      }
+    };
+
+    drawParticle();
+  };
+
+
   return (
-    <div className={styles.buttonContainer}>
-      <div 
-        ref={effectContainerRef} 
-        className={styles.effectContainer} 
-        onTouchStart={handleTouchStart} 
-        onMouseDown={handleTouchStart}
-      >
+    <div className={styles.buttonContainer} >
+        <canvas ref={canvasRef} width={500} height={300} className={styles.canvas} />
         {/* Кнопка с изображением монеты */}
-        <button className={styles.tapbutton}>
+        <button className={styles.tapbutton} onTouchStart={handleTouchStart}>
           <Image
             ref={coinRef}
             className={styles.paskoimage}
@@ -110,7 +142,6 @@ const PaskoCoinButton = () => {
             alt="pasko"
           />
         </button>
-      </div>
     </div>
   );
 };
