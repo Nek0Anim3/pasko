@@ -41,4 +41,14 @@
   border: none;
   outline: none;
   user-select: none;
+  z-index: 1;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* чтобы события мыши не мешали взаимодействию с кнопкой */
+  user-select: none;
+  z-index: 2; /* Canvas выше, чем кнопка */
 }
