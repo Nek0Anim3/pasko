@@ -47,7 +47,6 @@ const Header = () => {
 
   useEffect(() => {
     function animate () {
-      console.log(1)
       gsap.fromTo(headerRef.current, {y: -400}, {y: 0, duration: 0.5, ease: "power4.out", delay: .1}) //нихуёво да (спиздил у хомяка)
       gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
     }
@@ -101,7 +100,7 @@ const Header = () => {
           <Grid2 size={6}>
             <Item className="userInfoCard">
               <Image src={'/perhour.svg'} width={22} height={22}></Image>
-              <h3>{abbreviateNumber(userData.user.income).value}{abbreviateNumber(userData.user.income).suffix} / h</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
+              <h3>{abbreviateNumber(userData.user.income).value}{abbreviateNumber(userData.user.income).suffix} / ч</h3> {/* отут короче надо будет чтоб с базы данных MongoDB бралось */}
             </Item>
           </Grid2>
           <Grid2 size={6}>

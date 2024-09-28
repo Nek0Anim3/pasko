@@ -9,8 +9,10 @@
   padding: 20px;
   position: absolute;
   flex-direction: column;
+  font-weight: lighter;
 }
 
 .title{
   font-family: "Monument";
+  font-size: 40px;
 }

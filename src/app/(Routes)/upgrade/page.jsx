@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import styles from './page.module.css'
 
 const Upgrades = () => {
@@ -8,11 +7,11 @@ const Upgrades = () => {
   return (
     <div className={`upgradeContent ${styles.upgradesPageContainer}`}>
 
-      <div className="upgradePageHeader">
+      <p className="upgradePageHeader">
         Pasko Anatoliy
-      </div>
+      </p>
 
-      <Typography variant="h3" component="h1" className={styles.title}>Upgrades</Typography>
+      <h1 className={styles.title}>Upgrades</h1>
     </div>
   );
 };
