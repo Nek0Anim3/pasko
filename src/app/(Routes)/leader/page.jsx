@@ -65,36 +65,39 @@ const Leaderboard = () => {
 
       <div className={styles.leaderboard}>
         {leaderboardData.map((user, index) => (
-          <div key={user.uid} className={styles.userLeaderInfo}>
-            {user.avatarUrl ? (
-              <Image
-                src={user.avatarUrl}
-                width={40}
-                height={40}
-                style={{ borderRadius: '50%' }}
-                alt="User Avatar"
-              />
-            ) : (
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  backgroundColor: '#ccc',
-                }}
-              /> // Placeholder for missing avatars
-            )}
+          <>
+            <div key={user.uid} className={styles.userLeaderInfo}>
+              {user.avatarUrl ? (
+                <Image
+                  src={user.avatarUrl}
+                  width={40}
+                  height={40}
+                  style={{ borderRadius: '50%' }}
+                  alt="User Avatar"
+                />
+              ) : (
+                <div
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '50%',
+                    backgroundColor: '#ccc',
+                  }}
+                /> // Placeholder for missing avatars
+              )}
 
-            <div className={styles.userLeaderboard}>
-              <Image src={'/paskocoin.png'} width={35} height={35} alt="Coins Icon" />
-              <p>
-                {abbreviateNumber(user.maxPoints).value}
-                {abbreviateNumber(user.maxPoints).suffix}
-              </p>
+              <div className={styles.userLeaderboard}>
+                <Image src={'/paskocoin.png'} width={35} height={35} alt="Coins Icon" />
+                <p>
+                  {abbreviateNumber(user.maxPoints).value}
+                  {abbreviateNumber(user.maxPoints).suffix}
+                </p>
+              </div>
+            
+              <p>#{index + 1}</p>
             </div>
-          
-            <p>#{index + 1}</p>
-          </div>
+            <div className={styles.divider}></div>
+          </>
         ))}
       </div>
     </div>
