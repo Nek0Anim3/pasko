@@ -16,9 +16,8 @@ const PaskoCoinButton = () => {
   const [size, setSize] = useState(initialSize);
   const coinRef = useRef(null); // Ref для изображения монеты
   const canvasRef = useRef(null);
-  const effectContainerRef = useRef(null); // Ref для контейнера эффекта
-  const buttonRef = useRef(null); // Ref для кнопки
-
+  let clickTimeout;
+  
   // Функция для обновления очков
   const updatePoints = () => {
     const updatedPoints = userData.user.points + userData.user.pointsPerTap;
@@ -47,11 +46,9 @@ const PaskoCoinButton = () => {
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
     const containerRect = effectContainerRef.current.getBoundingClientRect();
-    const buttonRect = buttonRef.current.getBoundingClientRect();
 
-    // Определяем координаты нажатия относительно контейнера
-    const touchX = (e.touches?.[0]?.clientX || e.clientX) - containerRect.left;
-    const touchY = (e.touches?.[0]?.clientY || e.clientY) - containerRect.top;
+    const button = e.currentTarget;
+    const buttonRect = button.getBoundingClientRect();
 
     // Смещение для эффекта, чтобы он появлялся над кнопкой
     const offsetY = buttonRect.height; // Отрицательное значение для появления выше кнопки
