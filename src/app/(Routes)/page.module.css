@@ -5,54 +5,6 @@
   justify-content: center;
 }
 
-.tapbutton {
-  background-color: #0a0a0a;
-  border: none;
-  transition: 10ms;
-  outline: none;
-  user-select: none;
-}
-
-.buttonContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.clickArea {
-  display: flex;
-  justify-content: center;
-  width: auto;
-  height: auto;
-  overflow: hidden; /* Скрываем эффекты, выходящие за границы */
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.tapEffect {
-  position: absolute;
-  color: rgb(255, 255, 255); 
-  font-size: 24px;
-  font-weight: bold;
-  animation: floatUp 1.5s ease-out forwards;
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-50px); 
-    opacity: 0; 
-  }
-}
-
-
-.paskoimage{
-  pointer-events: none;
-}
-
 .lvlcontainer {
   display: flex;
   
