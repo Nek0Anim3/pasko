@@ -24,7 +24,6 @@
   display: flex;
   justify-content: center;
   z-index: 3;
-  transition: all 1s ease-in-out;
 }
 
 .user {
