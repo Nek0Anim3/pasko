@@ -46,7 +46,6 @@ const PaskoCoinButton = () => {
 
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    e.preventDefault(); // предотвратить поведение по умолчанию
 
     const button = e.currentTarget; // использование currentTarget для доступа к элементу
     const buttonRect = button.getBoundingClientRect();
