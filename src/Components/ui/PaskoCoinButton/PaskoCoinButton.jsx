@@ -1,137 +1,113 @@
-"use client"
+"use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
-const { default: useUserStore } = require("@/src/Store/userStore");
-
-import styles from './PaskoCoinButton.module.css'
-import abbreviateNumber from "@/src/utils/abbreviateNumber";
+import { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
+import useUserStore from "@/src/Store/userStore";
 import useLoadingStore from "@/src/Store/loadingStore";
+import abbreviateNumber from "@/src/utils/abbreviateNumber";
+import styles from './PaskoCoinButton.module.css';
 
 const PaskoCoinButton = () => {
-  const {userData, updateUserData} = useUserStore()
-
-
-  // Обработка клика по экрану
-  const handleTouchStart = (e) => {
-    Array.from(e.touches).forEach((touch) => {
-      const buttonRect = e.target.getBoundingClientRect();
-      const buttonCenterX = buttonRect.left + buttonRect.width / 2;
-      const buttonCenterY = buttonRect.top + buttonRect.height / 2;
-      const offsetX = (Math.random() - 0.5) * 100;
-      const offsetY = (Math.random() - 0.5) * 100;
+  const { userData, updateUserData } = useUserStore();
+  const { isLoadingAnim } = useLoadingStore();
   
-      // Создаем новый эффект на основе касания
-      const newEffect = {
-        id: Date.now() + touch.identifier, // уникальный id для каждого касания
-        x: buttonCenterX + offsetX,
-        y: buttonCenterY + offsetY,
-        text: `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`
-      };
-  
-      setEffects((prevEffects) => [...prevEffects, newEffect]);
-  
-      // Обновляем количество очков пользователя
-      const updatedPoints = userData.user.points + userData.user.pointsPerTap;
-      const updatedMaxPoints = userData.user.maxPoints + userData.user.pointsPerTap;
-  
-      // Вызываем метод для обновления состояния
-      updateUserData({
-        ...userData,
-        user: {
-          ...userData.user,
-          points: updatedPoints,
-          maxPoints: updatedMaxPoints
-        }
-      });
-  
-      // Сбрасываем таймер при каждом касании
-      if (clickTimeout) {
-        clearTimeout(clickTimeout);
-      }
-  
-      // Устанавливаем новый таймер на 1 секунду
-      const newTimeout = setTimeout(() => {
-        // Отправка запроса на сервер
-        fetch('/api/user/putUser', {
-          method: 'PUT',
-          body: JSON.stringify({
-            uid: userData.user.uid,
-            points: updatedPoints,
-            maxPoints: updatedMaxPoints
-          })
-        });
-      }, 1000);
-  
-      setClickTimeout(newTimeout);
-    });
-  };
-
-  const [clickTimeout, setClickTimeout] = useState(null); // Для хранения таймера
-
-  //ТУТА ВОТ ИЗМЕНЕНИЕ РАЗМЕРОВ КАРТИНКИ ТОЛИКА 
   const initialSize = { width: 300, height: 300 };
   const [size, setSize] = useState(initialSize);
-  const MouseDN = () => {
-    setSize({
-      width: initialSize.width - 5,
-      height: initialSize.height - 5,
+  const coinRef = useRef(null); // Ref для изображения монеты
+  const effectContainerRef = useRef(null); // Ref для контейнера эффекта
+
+  // Функция для обновления очков
+  const updatePoints = () => {
+    const updatedPoints = userData.user.points + userData.user.pointsPerTap;
+    const updatedMaxPoints = userData.user.maxPoints + userData.user.pointsPerTap;
+
+    updateUserData({
+      ...userData,
+      user: {
+        ...userData.user,
+        points: updatedPoints,
+        maxPoints: updatedMaxPoints
+      }
+    });
+
+    // Отправка обновленных данных на сервер через 1 секунду
+    fetch('/api/user/putUser', {
+      method: 'PUT',
+      body: JSON.stringify({
+        uid: userData.user.uid,
+        points: updatedPoints,
+        maxPoints: updatedMaxPoints
+      })
     });
   };
 
-  const MouseUP = () => {
-    setSize(initialSize);
-  };
+  // Обработка нажатия на кнопку (анимация монеты и текста "+1")
+  const handleTouchStart = (e) => {
+    const containerRect = effectContainerRef.current.getBoundingClientRect();
+    const buttonRect = coinRef.current.getBoundingClientRect();
 
-  //ТУТ ПОТУЖНИЙ ПРИКОЛ С АНИМАЦИЕЙ (ПРОДА В CSS)
-  const [effects, setEffects] = useState([]);
+    // Определяем координаты нажатия относительно контейнера
+    const touchX = (e.touches?.[0]?.clientX - 0.3 || e.clientX  - 0.3) - containerRect.left;
+    const touchY = (e.touches?.[0]?.clientY || e.clientY) - containerRect.top;
 
-  // Удаление эффекта через секунду
-  useEffect(() => {
-    const timers = effects.map(effect => {
-      return setTimeout(() => {
-        setEffects((prevEffects) => prevEffects.filter(e => e.id !== effect.id));
-      }, 1000);
+    // Смещение для эффекта, чтобы он появлялся над кнопкой
+    const offsetY = buttonRect.height * -1.1; // Отрицательное значение для появления выше кнопки
+
+    // Анимация "+1" в пределах контейнера
+    const effectEl = document.createElement('div');
+    effectEl.innerText = `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`;
+    effectEl.className = styles.tapEffect;
+    effectContainerRef.current.appendChild(effectEl);
+    
+    gsap.fromTo(
+      effectEl,
+      { x: touchX, y: touchY + offsetY, opacity: 1, scale: 0 },
+      { y: touchY + offsetY - 50, scale: 1, opacity: 0, duration: 1.5, ease: "power1.out", onComplete: () => effectEl.remove() }
+    );
+    // Анимация нажатия на монету
+    gsap.to(coinRef.current, {
+      scale: 0.96,
+      duration: 0.05,
+      ease: "power1.out",
+      onComplete: () => {
+        gsap.to(coinRef.current, { scale: 1, duration: 0.05, ease: "power1.in" });
+      }
     });
 
-    return () => {
-      timers.forEach(timer => clearTimeout(timer));
-    };
-  }, [effects]);
+    // Обновление очков пользователя
+    updatePoints();
+  };
 
-
-  //Анимация монетки
-  const {isLoadingAnim} = useLoadingStore();
+  // Анимация монетки при загрузке
   useEffect(() => {
-    function animate () {
-      const timeline = gsap.timeline()
-
-      timeline.fromTo(".coin", {scale: 0}, {scale: 1, ease: "expo.inOut"})
+    if (!isLoadingAnim) {
+      gsap.fromTo(coinRef.current, { scale: 0 }, { scale: 1, ease: "expo.inOut" });
     }
+  }, [isLoadingAnim]);
 
-    if(!isLoadingAnim) animate()
-  }, [isLoadingAnim])
-
-  return(
+  return (
     <div className={styles.buttonContainer}>
-      <div className={styles.clickArea} onTouchStart={handleTouchStart}>
-          {effects.map(effect => (
-            <span
-              key={effect.id}
-              className={styles.tapEffect}
-              style={{ left: effect.x, top: effect.y }}
-            >
-              {effect.text}
-            </span>
-          ))}
-          <button className={styles.tapbutton} onMouseDown={MouseDN} onMouseUp={MouseUP} onTouchStart={MouseDN} onTouchEnd={MouseUP}>
-            <Image className={styles.paskoimage} src={'/paskocoin.png'/*Єх вотбі оні мінялісь*/} width={size.width} height={size.height} alt="pasko"></Image>
-          </button>
+      <div 
+        ref={effectContainerRef} 
+        className={styles.effectContainer} 
+        onTouchStart={handleTouchStart} 
+        onMouseDown={handleTouchStart}
+      >
+        {/* Кнопка с изображением монеты */}
+        <button className={styles.tapbutton}>
+          <Image
+            ref={coinRef}
+            className={styles.paskoimage}
+            src="/paskocoin.png"
+            width={size.width}
+            height={size.height}
+            alt="pasko"
+          />
+        </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PaskoCoinButton
+export default PaskoCoinButton;
