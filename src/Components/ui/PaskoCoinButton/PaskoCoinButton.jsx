@@ -124,7 +124,7 @@ const PaskoCoinButton = () => {
   return (
     <div className={styles.buttonContainer}>
       <canvas ref={canvasRef} width={500} height={300} className={styles.canvas} />
-      <button className={styles.tapbutton} onTouchStart={handleTouchStart} >
+      <button className={styles.tapbutton} onTouchStart={handleTouchStart} onMouseDown={handleTouchStart}>
         <Image
           ref={coinRef}
           className={styles.paskoimage}
