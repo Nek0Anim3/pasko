@@ -1,45 +1,79 @@
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/src/lib/db'; // Подключение к MongoDB клиенту
+import { connectToDatabase } from '@/src/lib/db';
 
 export async function PUT(req) {
   try {
+    // Получаем данные из тела запроса
     const { uid, points, maxPoints, pointsPerTap, income, friendsInvited, level, upgrades } = await req.json();
-    //console.log(uid)
-    const { database } = await connectToDatabase();
 
-    // Подключаемся к базе данных
-    //console.log("Подключение к базе данных установлено.");
+    // Проверка на обязательные поля
+    if (!uid) {
+      return NextResponse.json({ error: 'Invalid or missing uid' }, { status: 400 });
+    }
+
+    // Подключение к базе данных
+    const { database } = await connectToDatabase();
 
     // Находим пользователя по uid
     const user = await database.collection("users").findOne({ uid });
-
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Обновляем данные пользователя
-    const updatedUser = {
+    let updatedUser = { ...user };
+
+    let isLvlCorrect = false;
+    let newLvl = user.level + 1;
+    // Логика проверки и обновления уровня
+    if (maxPoints !== undefined && level !== undefined) {
+      const nextLevelPoints = calculateNextLevelPoints(user.level);
+      
+      // Проверяем, что текущие очки >= требуемым для следующего уровня
+      if (maxPoints >= nextLevelPoints) {
+        isLvlCorrect = true;
+      }
+    }
+
+    // Обновляем только те поля, которые были переданы
+    updatedUser = {
       ...(points !== undefined && { points }),
       ...(maxPoints !== undefined && { maxPoints }),
       ...(pointsPerTap !== undefined && { pointsPerTap }),
       ...(income !== undefined && { income }),
+      ...(level !== undefined && isLvlCorrect && {level: newLvl}),
       ...(friendsInvited !== undefined && { friendsInvited }),
-      ...(level !== undefined && { level }),
-      ...(upgrades !== undefined && { upgrades })
+      ...(upgrades !== undefined && { upgrades }),
     };
 
+    console.log(updatedUser)
+
+    // Обновляем данные пользователя в базе данных
     await database.collection("users").updateOne(
       { uid }, 
       { $set: updatedUser }
     );
 
-    // Возвращаем обновленные данные пользователя
-    const updatedData = await database.collection("users").findOne({ uid });
-
-    return NextResponse.json({ user: updatedData });
+    return NextResponse.json({ user: updatedUser });
 
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
   }
+}
+
+// Функция для расчета очков, необходимых для следующего уровня
+function calculateNextLevelPoints(currLevel) {
+  let nextLevelPoints = (currLevel + 1) * 1000;
+
+  // Увеличиваем сложность уровней 1 и выше
+  if (currLevel > 0) {
+    nextLevelPoints *= ((currLevel + currLevel * 0.05) * 50);
+  }
+
+  // Увеличиваем требования для уровней 10+
+  if (currLevel >= 10) {
+    nextLevelPoints += nextLevelPoints * currLevel * 0.05;
+  }
+
+  return nextLevelPoints;
 }

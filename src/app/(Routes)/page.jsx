@@ -79,7 +79,6 @@ export default function Farm() {
     // Устанавливаем новый таймер на 1 секунду
     const newTimeout = setTimeout(() => {
       // Отправка запроса на сервер
-      console.log("Отправка запроса на сервер для обновления данных...");
       fetch('/api/user/putUser', { method: 'PUT', 
         body: 
           JSON.stringify(
