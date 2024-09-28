@@ -43,16 +43,17 @@ const PaskoCoinButton = () => {
       })
     });
   };
-  let clickTimeout; // Declare clickTimeout in the outer scope
+
   // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
+    e.preventDefault();
 
     const button = e.currentTarget;
     const buttonRect = button.getBoundingClientRect();
 
     // Обновление очков
-    const touchX = e.touches[0].clientX - buttonRect.left;
-    const touchY = e.touches[0].clientY - buttonRect.top;
+    //const touchX = e.touches[0].clientX - buttonRect.left;
+    //const touchY = e.touches[0].clientY - buttonRect.top;
 
     clearTimeout(clickTimeout); // Очистка предыдущего таймера
 

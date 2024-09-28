@@ -12,7 +12,7 @@ const Upgrades = () => {
         Pasko Anatoliy
       </div>
 
-      <Typography variant="h3" component="h1" className={styles.title}>Upgrades</Typography>
+      <h1 className={styles.title}>Upgrades</h1>
     </div>
   );
 };
