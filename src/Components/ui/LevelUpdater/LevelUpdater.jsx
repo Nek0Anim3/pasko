@@ -7,7 +7,7 @@ const LevelUpdater = () => {
 
   useEffect(() => {
     const progressPercentage = CalculateLevel(userData.user.level, userData.user.maxPoints);
-
+    
     if (progressPercentage >= 100) {
       updateUserData({
         ...userData,
