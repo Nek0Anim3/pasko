@@ -11,14 +11,14 @@ import styles from './PaskoCoinButton.module.css';
 const PaskoCoinButton = () => {
   const { userData, updateUserData } = useUserStore();
   const { isLoadingAnim } = useLoadingStore();
-
+  
   const initialSize = { width: 300, height: 300 };
   const [size, setSize] = useState(initialSize);
-  const coinRef = useRef(null); // Ref для изображения монеты
+  const coinRef = useRef(null); 
+  const effectContainerRef = useRef(null);
   const canvasRef = useRef(null);
-  let clickTimeout;
-  
-  // Функция для обновления очков
+  let clickTimeout = useRef(null); // Используем useRef для хранения таймера
+
   const updatePoints = () => {
     const updatedPoints = userData.user.points + userData.user.pointsPerTap;
     const updatedMaxPoints = userData.user.maxPoints + userData.user.pointsPerTap;
@@ -33,8 +33,8 @@ const PaskoCoinButton = () => {
     });
 
     // Отправка обновленных данных на сервер через 1 секунду
-    fetch('/api/user/putUser', {
-      method: 'PUT',
+    fetch("/api/user/putUser", {
+      method: "PUT",
       body: JSON.stringify({
         uid: userData.user.uid,
         points: updatedPoints,
@@ -43,29 +43,25 @@ const PaskoCoinButton = () => {
     });
   };
 
-  // Обработка нажатия на кнопку (анимация монеты и текста "+1")
   const handleTouchStart = (e) => {
-    const containerRect = effectContainerRef.current.getBoundingClientRect();
-
+    e.preventDefault();
     const button = e.currentTarget;
     const buttonRect = button.getBoundingClientRect();
 
-    // Смещение для эффекта, чтобы он появлялся над кнопкой
-    const offsetY = buttonRect.height; // Отрицательное значение для появления выше кнопки
+    clearTimeout(clickTimeout.current); // Очистка предыдущего таймера
 
-    // Анимация "+1" в пределах контейнера
-    const effectEl = document.createElement('div');
-    effectEl.innerText = `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`;
-    effectEl.className = styles.tapEffect;
-    effectContainerRef.current.appendChild(effectEl);
+    // Обновление очков
+    Array.from(e.touches || [e]).forEach((touch) => {
+      const touchX = (touch.clientX || touch.touches[0].clientX) - buttonRect.left;
+      const touchY = (touch.clientY || touch.touches[0].clientY) - buttonRect.top;
 
-    gsap.fromTo(
-      effectEl,
-      { x: touchX, y: touchY + offsetY, opacity: 1, scale: 0 },
-      { y: touchY + offsetY - 50, scale: 1, opacity: 0, duration: 1.5, ease: "power1.out", onComplete: () => effectEl.remove() }
-    );
+      createParticle(
+        touchX,
+        touchY,
+        `+${abbreviateNumber(userData.user.pointsPerTap).value}${abbreviateNumber(userData.user.pointsPerTap).suffix}`
+      );
+    });
 
-    // Анимация нажатия на монету
     gsap.to(coinRef.current, {
       scale: 0.96,
       duration: 0.05,
@@ -75,30 +71,60 @@ const PaskoCoinButton = () => {
       },
     });
 
-    // Обновление очков пользователя
-    updatePoints();
+    clickTimeout.current = setTimeout(() => {
+      updatePoints();
+    }, 1000);
   };
 
-  // Анимация монетки при загрузке
   useEffect(() => {
-    function animate() {
+    const animate = () => {
       const timeline = gsap.timeline();
       timeline.fromTo(".coin", { scale: 0 }, { scale: 1, ease: "expo.inOut" });
-    }
+    };
 
     if (!isLoadingAnim) animate();
   }, [isLoadingAnim]);
 
-  return (
-    <div className={styles.buttonContainer} ref={effectContainerRef}>
-      <canvas ref={canvasRef} width={500} height={300} className={styles.canvas} />
+  const createParticle = (x, y, text) => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
 
-      <button
-        className={styles.tapbutton}
-        onTouchStart={handleTouchStart}
-        onMouseDown={handleTouchStart}
-        ref={buttonRef}
-      >
+    const particle = {
+      x,
+      y,
+      text,
+      opacity: 1,
+      scale: 1,
+      vy: -1,
+      lifespan: 1000, 
+    };
+
+    const drawParticle = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height); 
+
+      context.font = `${24 * particle.scale}px Arial`;
+      context.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+
+      context.fillText(particle.text, particle.x, particle.y);
+
+      particle.y += particle.vy; 
+      particle.opacity -= 0.03; 
+      particle.scale += 0.005; 
+
+      if (particle.opacity > 0) {
+        requestAnimationFrame(drawParticle);
+      }
+    };
+
+    drawParticle();
+  };
+
+  return (
+    <div className={styles.buttonContainer}>
+      <canvas ref={canvasRef} width={500} height={300} className={styles.canvas} />
+      <button className={styles.tapbutton} onTouchStart={handleTouchStart} onClick={handleTouchStart}>
         <Image
           ref={coinRef}
           className={styles.paskoimage}
