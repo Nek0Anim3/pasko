@@ -47,7 +47,7 @@ const Header = () => {
 
   useEffect(() => {
     function animate () {
-      gsap.fromTo(headerRef.current, {y: -400}, {y: 0, duration: 0.5, ease: "power4.out", delay: .1}) //нихуёво да (спиздил у хомяка)
+      if(pathname == "/") gsap.fromTo(headerRef.current, {y: -400}, {y: 0, duration: 0.5, ease: "power4.out", delay: .1}) //нихуёво да (спиздил у хомяка)
       gsap.fromTo(".userInfoCard", {scale: 0}, {scale: 1, duration: 0.5, ease: "expo.inOut", delay: .1}) //нихуёво да (спиздил у хомяка)
     }
 
@@ -57,7 +57,7 @@ const Header = () => {
 
   useEffect(() => {
     const timeline = gsap.timeline()
-    if(pathname == "/upgrade") {
+    if(pathname == "/upgrade" || pathname == "/leader") {
       timeline.to("header", {y: -300, duration: 0.5})
     } else if (pathname == "/") {
       timeline.to("header", {y: 0, duration: 0.5})
