@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import useLoadingStore from '@/src/Store/loadingStore';
 import gsap from 'gsap';
+import { useRouter } from 'next/navigation';
 
 const Footer = () => {
+  const router = useRouter();
   const [activeButton, setActiveButton] = useState(null); // Добавляем состояние для активной кнопки
   const {isLoadingAnim} = useLoadingStore();
   const [indicatorStyle, setIndicatorStyle] = useState({
@@ -15,6 +17,18 @@ const Footer = () => {
   });
   const buttonRefs = useRef([]);
 
+  const navigateWithDelay = (newPath) => {
+    // Start fade-out animation before changing the route
+    gsap.to(".content", {
+      duration: 0.1,
+      opacity: 0,
+      ease: "power2.out",
+      onComplete: () => {
+        // After animation, wait a bit and then change the route
+        router.push(newPath);
+      },
+    });
+  };
 
   useEffect(() => {
     function animate () {
@@ -64,7 +78,7 @@ const Footer = () => {
   return (
     <footer style={{ bottom: '-50px' }}>
       <nav className={styles.footerContainer}>
-        <Link href="/upgrade" passHref>
+        <div onClick={() => navigateWithDelay("/upgrade")}>
           <button 
             ref={(el) => (buttonRefs.current[0] = el)}
             className={`${styles.footerButton} ${activeButton === 1 ? styles.active : ''}`}
@@ -72,9 +86,9 @@ const Footer = () => {
           >
             <Image src="/upgrade.svg" width={30} height={30} alt="Upgrade Icon" />
           </button>
-        </Link>
+        </div>
 
-        <Link href="/leader" passHref>
+        <div onClick={() => navigateWithDelay("/leader")}>
           <button 
             ref={(el) => (buttonRefs.current[1] = el)}
             className={`${styles.footerButton} ${activeButton === 2 ? styles.active : ''}`}
@@ -82,9 +96,9 @@ const Footer = () => {
           >
             <Image src="/leaderboard.svg" width={30} height={30} alt="Leader Icon" />
           </button>
-        </Link>
+        </div>
 
-        <Link href="/" passHref>
+        <div onClick={() => navigateWithDelay("/")}>
           <button 
             ref={(el) => (buttonRefs.current[2] = el)}
             className={`${styles.footerButton} ${activeButton === 3 ? styles.active : ''}`}
@@ -92,9 +106,9 @@ const Footer = () => {
           >
             <Image src="/mine.svg" width={30} height={30} alt="Mine Icon" />
           </button>
-        </Link>
+        </div>
 
-        <Link href="/invite" passHref>
+        <div onClick={() => navigateWithDelay("/invite")}>
           <button 
             ref={(el) => (buttonRefs.current[3] = el)}
             className={`${styles.footerButton} ${activeButton === 4 ? styles.active : ''}`}
@@ -102,9 +116,9 @@ const Footer = () => {
           >
             <Image src="/invite.svg" width={30} height={30} alt="Invite Icon" />
           </button>
-        </Link>
+        </div>
 
-        <Link href="/task" passHref>
+        <div onClick={() => navigateWithDelay("/task")}>
           <button 
             ref={(el) => (buttonRefs.current[4] = el)}
             className={`${styles.footerButton} ${activeButton === 5 ? styles.active : ''}`}
@@ -112,7 +126,7 @@ const Footer = () => {
           >
             <Image src="/tasks.svg" width={30} height={30} alt="Task Icon" />
           </button>
-        </Link>
+        </div>
       </nav>
       <div className={`palochka ${styles.indicator}`} style={indicatorStyle} />
     </footer>
