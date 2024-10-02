@@ -16,3 +16,8 @@
   font-family: "Monument";
   font-size: 40px;
 }
+
+.itemlabels {
+  background-color: #000;
+  color: #fff;
+}
