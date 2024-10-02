@@ -4,7 +4,17 @@ import path from 'path';
 
 export async function POST(req) {
   const token = process.env.BOT_TOKEN;
-  const { uid } = await req.json(); 
+  const { uid } = await req.json();
+
+  // Путь для сохранения аватара
+  const avatarPath = path.join(process.cwd(), 'public', 'avatars', `${uid}.jpg`);
+  
+  // Проверка, существует ли аватар
+  if (fs.existsSync(avatarPath)) {
+    // Если аватар уже существует, возвращаем его URL
+    const savedAvatarUrl = `${process.env.NEXT_PUBLIC_API_URL}avatars/${uid}.jpg`;
+    return NextResponse.json({ avatarUrl: savedAvatarUrl });
+  }
 
   // Параметры для первого запроса (getUserProfilePhotos)
   const userProfilePhotosOptions = {
@@ -14,7 +24,7 @@ export async function POST(req) {
       'User-Agent': 'Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)',
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ user_id: uid, offset: null, limit: 1 }),  // запрос 1 фото
+    body: JSON.stringify({ user_id: uid, offset: null, limit: 1 }), // запрос 1 фото
   };
 
   try {
@@ -56,8 +66,7 @@ export async function POST(req) {
       const avatarBuffer = await avatarResponse.arrayBuffer(); // Получаем данные как ArrayBuffer
       const buffer = Buffer.from(avatarBuffer); // Преобразуем ArrayBuffer в Buffer
 
-      // Путь для сохранения аватара (в данном примере сохраняется локально)
-      const avatarPath = path.join(process.cwd(), 'public', 'avatars', `${uid}.jpg`);
+      // Сохраняем аватар
       fs.writeFileSync(avatarPath, buffer);
 
       // URL сохраненного аватара
