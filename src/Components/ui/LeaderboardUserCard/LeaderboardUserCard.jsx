@@ -1,6 +1,5 @@
 // components/LeaderboardUserCard.js
 import Image from 'next/image';
-import ScrollingText from '@/src/Components/ui/ScrollNickname/ScrollNickname';
 import abbreviateNumber from '@/src/utils/abbreviateNumber';
 import styles from './LeaderboardUserCard.module.css'; // Создай стили, если нужно
 
@@ -26,7 +25,7 @@ const LeaderboardUserCard = ({ user, index }) => {
         /> // Placeholder for missing avatars
       )}
 
-      <ScrollingText nick={user.firstName || 'Anonymous'} />
+      {/*<ScrollingText nick={user.firstName || 'Anonymous'} />*/}
 
       <div className={styles.userLeaderboard}>
         <Image src={'/paskocoin.png'} width={35} height={35} alt="Coins Icon" />

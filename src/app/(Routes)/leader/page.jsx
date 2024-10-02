@@ -1,6 +1,6 @@
-"use client";
 
-import { useEffect, useState } from 'react';
+
+//import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './page.module.css';
 import abbreviateNumber from '@/src/utils/abbreviateNumber';
@@ -8,13 +8,13 @@ import useUserStore from '@/src/Store/userStore';
 import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/LeaderboardUserCard';
 
 
-const Leaderboard = () => {
-  const { isLoading, userData, photoUrl } = useUserStore();
-  const [leaderboardData, setLeaderboardData] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Leaderboard = async () => {
+  const { isLoading, userData, photoUrl } = useUserStore.getState();
+  //const [leaderboardData, setLeaderboardData] = useState([]);
+  //const [loading, setLoading] = useState(true);
 
   // Fetch leaderboard data when the component mounts
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchLeaderboardData = async () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/getall`, { cache: 'reload' });
       const data = await response.json();
@@ -25,10 +25,18 @@ const Leaderboard = () => {
     };
 
     fetchLeaderboardData();
-  }, []);
+  }, []);*/
+
+  // Используйте fetch для получения данных с кэшированием
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/getall`, { 
+    cache: 'no-store', // Установите это, если вы хотите всегда получать свежие данные
+    next: { revalidate: 1 }, // Обновлять данные каждые 30 минут
+  });
+  
+  const { users: leaderboardData } = await res.json();
 
   // Check if either user data or leaderboard data is still loading
-  if (isLoading || loading) return null;
+  //if (isLoading || loading) return null;
 
   return (
     <div className={styles.leaderboardContainer}>
