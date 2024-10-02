@@ -14,7 +14,7 @@ const Leaderboard = () => {
   
   // Используем SWR для получения данных с автоматическим обновлением
   const { data, error, isLoading } = useSWR("/api/user/getall", fetcher, {
-    refreshInterval: 1800000, // Обновлять каждые 30 минут
+    refreshInterval: 10000, // Обновлять каждые 30 минут
   });
   
 
