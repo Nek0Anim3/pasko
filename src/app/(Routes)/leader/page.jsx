@@ -1,40 +1,25 @@
+"use client"
 
-
-//import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './page.module.css';
 import abbreviateNumber from '@/src/utils/abbreviateNumber';
 import useUserStore from '@/src/Store/userStore';
 import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/LeaderboardUserCard';
+import useSWR from 'swr';
 
-const Leaderboard = async () => {
-  const { isLoading, userData, photoUrl } = useUserStore.getState();
-  //const [leaderboardData, setLeaderboardData] = useState([]);
-  //const [loading, setLoading] = useState(true);
+const fetcher = (url) => fetch(url).then(res => res.json());
 
-  // Fetch leaderboard data when the component mounts
-  /*useEffect(() => {
-    const fetchLeaderboardData = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/getall`, { cache: 'reload' });
-      const data = await response.json();
-
-      // Ensure leaderboardData is an array
-      setLeaderboardData(Array.isArray(data.users) ? data.users : []);
-      setLoading(false);
-    };
-
-    fetchLeaderboardData();
-  }, []);*/
-
-  // Используйте fetch для получения данных с кэшированием
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/getall`, { 
-    next: { revalidate: 1 }, // Обновлять данные каждые 30 минут
+const Leaderboard = () => {
+  const { userData, photoUrl } = useUserStore.getState();
+  
+  // Используем SWR для получения данных с автоматическим обновлением
+  const { data, error, isLoading } = useSWR("/api/user/getall", fetcher, {
+    refreshInterval: 1800000, // Обновлять каждые 30 минут
   });
   
-  const { users: leaderboardData } = await res.json();
 
-  // Check if either user data or leaderboard data is still loading
-  //if (isLoading || loading) return null;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading leaderboard.</div>;
 
   return (
     <div className={styles.leaderboardContainer}>
@@ -57,7 +42,7 @@ const Leaderboard = async () => {
               borderRadius: '50%',
               backgroundColor: '#ccc',
             }}
-          /> // Placeholder for avatar
+          /> 
         )}
 
         <div className={styles.userLeaderboard}>
@@ -72,9 +57,9 @@ const Leaderboard = async () => {
       </div>
 
       <div className={styles.leaderboard}>
-        {leaderboardData.map((user, index) => (
+        {data.users.map((user, index) => (
           <div key={user.uid} style={{ width: "100%" }}>
-            <LeaderboardUserCard user={user} index={index} /> {/* Используем новый компонент */}
+            <LeaderboardUserCard user={user} index={index} />
             <div className={styles.divider}></div>
           </div>
         ))}
