@@ -14,7 +14,7 @@ export const getUserData = async () => {
     // Возвращаем фейковые данные
     const fakeUser = {
       id: 1277009903,
-      nickname: "Cenaure"
+      username: "Cenaure"
     };
 
     const initData = {
