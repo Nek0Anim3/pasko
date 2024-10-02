@@ -7,7 +7,6 @@ import abbreviateNumber from '@/src/utils/abbreviateNumber';
 import useUserStore from '@/src/Store/userStore';
 import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/LeaderboardUserCard';
 
-
 const Leaderboard = async () => {
   const { isLoading, userData, photoUrl } = useUserStore.getState();
   //const [leaderboardData, setLeaderboardData] = useState([]);
@@ -29,7 +28,6 @@ const Leaderboard = async () => {
 
   // Используйте fetch для получения данных с кэшированием
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/user/getall`, { 
-    cache: 'no-store', // Установите это, если вы хотите всегда получать свежие данные
     next: { revalidate: 1 }, // Обновлять данные каждые 30 минут
   });
   
