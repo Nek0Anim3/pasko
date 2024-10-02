@@ -13,8 +13,8 @@ export const getUserData = async () => {
   } catch (error) {
     // Возвращаем фейковые данные
     const fakeUser = {
-      id: 1002510359,
-      firstName: "NekoAnime"
+      id: 1277009903,
+      username: "Cenaure"
     };
 
     const initData = {
@@ -34,7 +34,7 @@ async function DbFetch(initData) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uid: initData.user.id, firstName: initData.user.firstName }),
+      body: JSON.stringify({ uid: initData.user.id, username: initData.user.username }),
     }),
     fetch("api/avatar", {
       method: "POST",
@@ -46,11 +46,12 @@ async function DbFetch(initData) {
   ]);
 
   if (!dbResponse.ok) {
-    throw new Error(`Ошибка запроса: ${dbResponse.status}`);
+    throw new Error(`Request error: ${dbResponse.status}`);
   }
 
-  const { user, new: isNew } = await dbResponse.json(); // Получаем флаг `new`
+  const { user, new: isNew } = await dbResponse.json();
   const { avatarUrl } = await avatarResponse.json();
 
   return { initData, user, avatarUrl, isNew };
 }
+

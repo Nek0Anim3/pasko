@@ -1,8 +1,20 @@
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
 export async function POST(req) {
   const token = process.env.BOT_TOKEN;
-  const { uid } = await req.json(); 
+  const { uid } = await req.json();
+
+  // Путь для сохранения аватара
+  const avatarPath = path.join(process.cwd(), 'public', 'avatars', `${uid}.jpg`);
+  
+  // Проверка, существует ли аватар
+  if (fs.existsSync(avatarPath)) {
+    // Если аватар уже существует, возвращаем его URL
+    const savedAvatarUrl = `${process.env.NEXT_PUBLIC_API_URL}avatars/${uid}.jpg`;
+    return NextResponse.json({ avatarUrl: savedAvatarUrl });
+  }
 
   // Параметры для первого запроса (getUserProfilePhotos)
   const userProfilePhotosOptions = {
@@ -12,7 +24,7 @@ export async function POST(req) {
       'User-Agent': 'Telegram Bot SDK - (https://github.com/irazasyed/telegram-bot-sdk)',
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ user_id: uid, offset: null, limit: 1 }),  // запрос 1 фото
+    body: JSON.stringify({ user_id: uid, offset: null, limit: 1 }), // запрос 1 фото
   };
 
   try {
@@ -47,10 +59,21 @@ export async function POST(req) {
       const fileData = await fileResponse.json();
 
       // URL для загрузки аватара
-      const avatarUrl = `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`;
+      const fileUrl = `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`;
+
+      // Скачиваем файл и сохраняем его локально (или можно использовать облачное хранилище)
+      const avatarResponse = await fetch(fileUrl);
+      const avatarBuffer = await avatarResponse.arrayBuffer(); // Получаем данные как ArrayBuffer
+      const buffer = Buffer.from(avatarBuffer); // Преобразуем ArrayBuffer в Buffer
+
+      // Сохраняем аватар
+      fs.writeFileSync(avatarPath, buffer);
+
+      // URL сохраненного аватара
+      const savedAvatarUrl = `${process.env.NEXT_PUBLIC_API_URL}avatars/${uid}.jpg`;
 
       // Возвращаем URL аватара
-      return NextResponse.json({ avatarUrl });
+      return NextResponse.json({ avatarUrl: savedAvatarUrl });
     } else {
       return NextResponse.json({ error: 'No profile photos found' }, { status: 404 });
     }

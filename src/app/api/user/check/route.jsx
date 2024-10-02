@@ -3,7 +3,7 @@ import { connectToDatabase } from '@/src/lib/db'; // подключение к M
 
 export async function POST(req) {
   try {
-    const { uid, firstName } = await req.json();
+    const { uid, username } = await req.json();
     const { database } = await connectToDatabase();
 
     // Проверяем, есть ли пользователь с таким uid
@@ -15,7 +15,7 @@ export async function POST(req) {
       // Если пользователь не найден, создаем нового пользователя
       const newUser = {
         uid,                    // ID аккаунта Telegram
-        firstName: firstName,
+        firstName: username,
         points: 0,              // Начальные очки
         maxPoints: 0,
         pointsPerTap: 1,
@@ -27,7 +27,7 @@ export async function POST(req) {
         lastUpdated: currentTime // Устанавливаем время последнего обновления на текущий момент
       };
 
-      const avatarResponse = await fetch("https://paskocoin.vercel.app/api/avatar", {
+      const avatarResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/avatar`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
