@@ -1,19 +1,26 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import cloudinary from 'cloudinary';
+
+// Конфигурация Cloudinary
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(req) {
   const token = process.env.BOT_TOKEN;
   const { uid } = await req.json();
 
-  // Путь для сохранения аватара
-  const avatarPath = path.join(process.cwd(), 'public', 'avatars', `${uid}.jpg`);
-  
-  // Проверка, существует ли аватар
-  if (fs.existsSync(avatarPath)) {
-    // Если аватар уже существует, возвращаем его URL
-    const savedAvatarUrl = `${process.env.NEXT_PUBLIC_API_URL}avatars/${uid}.jpg`;
-    return NextResponse.json({ avatarUrl: savedAvatarUrl });
+  // Проверка, существует ли аватар в Cloudinary
+  try {
+    const existingAvatar = await cloudinary.v2.api.resources_by_ids([`avatars/${uid}`]);
+    if (existingAvatar.resources.length > 0) {
+      const savedAvatarUrl = existingAvatar.resources[0].secure_url;
+      return NextResponse.json({ avatarUrl: savedAvatarUrl });
+    }
+  } catch (error) {
+    console.error('Error checking existing avatar in Cloudinary:', error);
   }
 
   // Параметры для первого запроса (getUserProfilePhotos)
@@ -61,18 +68,24 @@ export async function POST(req) {
       // URL для загрузки аватара
       const fileUrl = `https://api.telegram.org/file/bot${token}/${fileData.result.file_path}`;
 
-      // Скачиваем файл и сохраняем его локально (или можно использовать облачное хранилище)
+      // Скачиваем файл
       const avatarResponse = await fetch(fileUrl);
       const avatarBuffer = await avatarResponse.arrayBuffer(); // Получаем данные как ArrayBuffer
       const buffer = Buffer.from(avatarBuffer); // Преобразуем ArrayBuffer в Buffer
 
-      // Сохраняем аватар
-      fs.writeFileSync(avatarPath, buffer);
+      // Загружаем файл в Cloudinary
+      const uploadResponse = await cloudinary.v2.uploader.upload_stream(
+        { folder: 'avatars', public_id: uid, overwrite: true },
+        (error, result) => {
+          if (error) {
+            throw new Error('Cloudinary upload failed');
+          }
+          return result;
+        }
+      ).end(buffer);
 
-      // URL сохраненного аватара
-      const savedAvatarUrl = `${process.env.NEXT_PUBLIC_API_URL}avatars/${uid}.jpg`;
-
-      // Возвращаем URL аватара
+      // Возвращаем URL загруженного аватара
+      const savedAvatarUrl = uploadResponse.secure_url;
       return NextResponse.json({ avatarUrl: savedAvatarUrl });
     } else {
       return NextResponse.json({ error: 'No profile photos found' }, { status: 404 });

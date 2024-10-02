@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['api.telegram.org', 'localhost', 'paskocoin.vercel.app'], // Allow images from Telegram API
+    domains: ['api.telegram.org', 'res.cloudinary.com', 'paskocoin.vercel.app'], // Allow images from Telegram API
   },
 };
 
