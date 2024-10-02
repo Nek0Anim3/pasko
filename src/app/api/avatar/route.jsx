@@ -74,15 +74,10 @@ export async function POST(req) {
       const buffer = Buffer.from(avatarBuffer); // Преобразуем ArrayBuffer в Buffer
 
       // Загружаем файл в Cloudinary
-      const uploadResponse = await cloudinary.v2.uploader.upload_stream(
-        { folder: 'avatars', public_id: uid, overwrite: true },
-        (error, result) => {
-          if (error) {
-            throw new Error('Cloudinary upload failed');
-          }
-          return result;
-        }
-      ).end(buffer);
+      const uploadResponse = await cloudinary.v2.uploader.upload(
+        `data:image/jpeg;base64,${buffer.toString('base64')}`,
+        { folder: 'avatars', public_id: uid, overwrite: true }
+      );      
 
       // Возвращаем URL загруженного аватара
       const savedAvatarUrl = uploadResponse.secure_url;
