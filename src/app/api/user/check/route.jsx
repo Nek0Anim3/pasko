@@ -27,7 +27,7 @@ export async function POST(req) {
         lastUpdated: currentTime // Устанавливаем время последнего обновления на текущий момент
       };
 
-      const avatarResponse = await fetch("https://paskocoin.vercel.app/api/avatar", {
+      const avatarResponse = await fetch(`${process.env.API_URL}api/avatar`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

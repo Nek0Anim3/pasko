@@ -13,7 +13,6 @@ const Footer = () => {
   const {isLoadingAnim} = useLoadingStore();
   const [indicatorStyle, setIndicatorStyle] = useState({
     width: '0px', 
-    left: '0px'
   });
   const buttonRefs = useRef([]);
 
