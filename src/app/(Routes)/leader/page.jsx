@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from 'next/image';
 import styles from './page.module.css';
@@ -7,20 +7,18 @@ import useUserStore from '@/src/Store/userStore';
 import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/LeaderboardUserCard';
 import useSWR from 'swr';
 
+// Функция для получения данных
 const fetcher = (url) => fetch(url).then(res => res.json());
 
 const Leaderboard = () => {
-  const { userData, photoUrl } = useUserStore.getState();
+  const { userData, photoUrl } = useUserStore();
 
-  // Используем SWR для получения данных с автоматическим обновлением
-  const { data, error, isLoading, mutate } = useSWR("/api/user/getall", fetcher, {
-    refreshInterval: 10000, // Автоматическое обновление каждые 10 секунд
-    revalidateOnFocus: true, // Перезагрузка при возвращении на вкладку
-    dedupingInterval: 5000, // Интервал между запросами
-    revalidateIfStale: true, // Перезапрос данных, даже если страница предварительно отрендерена
-    revalidateOnMount: true, // Перезапрос данных при загрузке страницы на клиенте
+  // Используем SWR для получения данных. Данные обновляются только при заходе на страницу
+  const { data, error, isLoading } = useSWR("/api/user/getall", fetcher, {
+    refreshInterval: 1800000, // Обновление данных каждые 30 минут
+    revalidateOnFocus: true,  // Перезагрузка при возвращении на вкладку
+    revalidateOnMount: true,  // Перезапрос данных при загрузке страницы
   });
-  
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading leaderboard.</div>;

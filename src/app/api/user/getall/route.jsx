@@ -1,27 +1,36 @@
-// Пример метода GET для списка пользователей
-import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/src/lib/db'; 
+import { NextResponse } from 'next/server'; // Используем NextResponse
+import { connectToDatabase } from '@/src/lib/db'; // Подключение к MongoDB клиенту
+import NodeCache from 'node-cache';
 
-export async function GET(req) {
+const cache = new NodeCache({ stdTTL: 1800 }); // Кэш на 30 минут
+
+export async function GET() {
   try {
+    // Подключение к базе данных
     const { database } = await connectToDatabase();
-    
-    if (!database) {
-      return NextResponse.json({ error: 'Database connection failed' }, { status: 500 });
+
+    // Попробуем получить данные из кэша
+    const cachedLeaders = cache.get('leaderboard');
+    if (cachedLeaders) {
+      return NextResponse.json({ users: cachedLeaders }); // Возвращаем данные из кэша
     }
 
-    // Получаем всех пользователей и сортируем по убыванию maxPoints
+    // Получаем данные из базы данных
     const users = await database
       .collection("users")
       .find({}, { projection: { uid: 1, firstName: 1, maxPoints: 1, avatarUrl: 1 } })
-      .sort({ maxPoints: -1 })
+      .sort({ maxPoints: -1 }) // Сортируем по количеству очков
+      .limit(10) // Ограничиваем список до топ-10 пользователей
       .toArray();
 
-    // Возвращаем результат на клиент
+    // Кэшируем результат
+    cache.set('leaderboard', users);
+
+    // Возвращаем данные пользователям
     return NextResponse.json({ users });
 
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
+    console.error('Error fetching leaderboard data:', error);
+    return NextResponse.json({ error: 'Failed to fetch leaderboard data' }, { status: 500 });
   }
 }
