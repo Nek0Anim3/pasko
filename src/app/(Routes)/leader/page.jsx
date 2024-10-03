@@ -11,12 +11,13 @@ const fetcher = (url) => fetch(url).then(res => res.json());
 
 const Leaderboard = () => {
   const { userData, photoUrl } = useUserStore.getState();
-  
+
   // Используем SWR для получения данных с автоматическим обновлением
-  const { data, error, isLoading } = useSWR("/api/user/getall", fetcher, {
-    refreshInterval: 10000, // Обновлять каждые 30 минут
+  const { data, error, isLoading, mutate } = useSWR("/api/user/getall", fetcher, {
+    refreshInterval: 10000, // Обновляем данные каждые 10 секунд
+    revalidateOnFocus: true, // Перезагружаем данные при возвращении на вкладку
+    dedupingInterval: 5000,  // Данные не будут загружаться повторно в течение 5 секунд после последнего запроса
   });
-  
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading leaderboard.</div>;

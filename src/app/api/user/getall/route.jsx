@@ -5,6 +5,10 @@ import { connectToDatabase } from '@/src/lib/db';
 export async function GET(req) {
   try {
     const { database } = await connectToDatabase();
+    
+    if (!database) {
+      return NextResponse.json({ error: 'Database connection failed' }, { status: 500 });
+    }
 
     // Получаем всех пользователей и сортируем по убыванию maxPoints
     const users = await database

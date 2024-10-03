@@ -86,7 +86,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'No profile photos found' }, { status: 404 });
     }
   } catch (error) {
-    console.error('Error fetching avatar:', error);
+    console.error('Error fetching avatar:', error); 
     return NextResponse.json({ error: 'Failed to fetch avatar' }, { status: 500 });
   }
 }
