@@ -16,8 +16,9 @@ const Leaderboard = () => {
   const { data, error, isLoading, mutate } = useSWR("/api/user/getall", fetcher, {
     refreshInterval: 10000, // Обновляем данные каждые 10 секунд
     revalidateOnFocus: true, // Перезагружаем данные при возвращении на вкладку
-    dedupingInterval: 5000,  // Данные не будут загружаться повторно в течение 5 секунд после последнего запроса
-  });
+    dedupingInterval: 0,  // Деактивируем кэширование данных
+    cache: false,  // Запрещаем кэширование в SWR
+  });  
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading leaderboard.</div>;
