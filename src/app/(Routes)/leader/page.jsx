@@ -14,11 +14,13 @@ const Leaderboard = () => {
 
   // Используем SWR для получения данных с автоматическим обновлением
   const { data, error, isLoading, mutate } = useSWR("/api/user/getall", fetcher, {
-    refreshInterval: 10000, // Обновляем данные каждые 10 секунд
-    revalidateOnFocus: true, // Перезагружаем данные при возвращении на вкладку
-    dedupingInterval: 0,  // Деактивируем кэширование данных
-    cache: false,  // Запрещаем кэширование в SWR
-  });  
+    refreshInterval: 10000, // Автоматическое обновление каждые 10 секунд
+    revalidateOnFocus: true, // Перезагрузка при возвращении на вкладку
+    dedupingInterval: 5000, // Интервал между запросами
+    revalidateIfStale: true, // Перезапрос данных, даже если страница предварительно отрендерена
+    revalidateOnMount: true, // Перезапрос данных при загрузке страницы на клиенте
+  });
+  
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading leaderboard.</div>;
