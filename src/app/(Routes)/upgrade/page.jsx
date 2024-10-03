@@ -8,7 +8,6 @@ import Box from '@mui/material/Box';
 import UpgradeCard from '@/src/Components/ui/UpgradeCard/UpgradeCard';
 import styles from './page.module.css'
 import Grid from '@mui/material/Grid2';
-import { height } from '@mui/system';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,15 +55,15 @@ const Upgrades = () => {
 
       <h1 className={styles.title}>Upgrades</h1>
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: '#202020'}}>
+        <Box sx={{ borderBottom: 1, borderColor: '#202020'}} className={styles.itemBox}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="ОСНОВНЫЕ" {...a11yProps(0)} className={styles.itemlabels}/>
             <Tab label="КУРСЫ" {...a11yProps(1)} className={styles.itemlabels}/>
             <Tab label="КАБИНЕТ" {...a11yProps(2)} className={styles.itemlabels}/>
           </Tabs>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} paddingBottom={6}>
+        <CustomTabPanel value={value} index={0} className={styles.tabOne}>
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 3 }} paddingBottom={6} className={styles.grid} >
             <Grid size={6}>
               <UpgradeCard img={'./upgrades/tap.png'} title={'+Тап'} desc={'+338 / клик'} /*И еще тут buttonClick={действие} есть*//> 
             </Grid>
