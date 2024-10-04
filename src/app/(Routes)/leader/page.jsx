@@ -1,27 +1,50 @@
 "use client";
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import abbreviateNumber from '@/src/utils/abbreviateNumber';
 import useUserStore from '@/src/Store/userStore';
 import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/LeaderboardUserCard';
-import useSWR from 'swr';
 
 // Функция для получения данных
 const fetcher = async (url) => {
-  console.log("Fetching data from", url); // Добавляем лог
+  console.log("Fetching data from", url);
   const res = await fetch(url);
   return res.json();
 };
 
 const Leaderboard = () => {
   const { userData, photoUrl } = useUserStore();
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Используем SWR для получения данных. Данные обновляются только при заходе на страницу
-  const { data, error, isLoading } = useSWR("/api/user/getall", fetcher);
+  // Функция для получения данных раз в 10 секунд
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetcher("/api/user/getall");
+      setData(result);
+      setError(null);
+    } catch (err) {
+      setError("Error loading leaderboard.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // Загружаем данные при загрузке компонента
+    const interval = setInterval(() => {
+      fetchData(); // Обновляем данные каждые 10 секунд
+    }, 10000);
+
+    return () => clearInterval(interval); // Очищаем интервал при размонтировании компонента
+  }, []);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading leaderboard.</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className={styles.leaderboardContainer}>

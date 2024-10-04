@@ -4,10 +4,6 @@ import abbreviateNumber from '@/src/utils/abbreviateNumber';
 import styles from './LeaderboardUserCard.module.css'; // Создай стили, если нужно
 import dynamic from 'next/dynamic';
 
-const ScrollingText = dynamic(() => import('@/src/Components/ui/ScrollNickname/ScrollNickname'), {
-  ssr: false, // Отключаем серверный рендеринг для этого компонента
-});
-
 const LeaderboardUserCard = ({ user, index }) => {
   return (
     <div className={styles.userLeaderInfo}>
@@ -28,8 +24,6 @@ const LeaderboardUserCard = ({ user, index }) => {
           alt="User Avatar"
         /> 
       )}
-
-      <ScrollingText nick={user.firstName || 'Anonymous'} />
 
       <div className={styles.userLeaderboard}>
         <Image src={'/paskocoin.png'} width={35} height={35} alt="Coins Icon" />
