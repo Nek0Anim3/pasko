@@ -1,21 +1,28 @@
-import { NextResponse } from 'next/server'; // Используем NextResponse
-import { connectToDatabase } from '@/src/lib/db'; // Подключение к MongoDB клиенту
-import NodeCache from 'node-cache'; // Импортируем node-cache
+import { connectToDatabase } from '@/src/lib/db';
+import { NextResponse } from 'next/server';
+import { createClient } from 'redis';
 
-// Создаем экземпляр кэша с таймаутом жизни кэша (TTL) 60 секунд
-const cache = new NodeCache({ stdTTL: 60, checkperiod: 120 });
+const redisClient = createClient({
+    password: 'CavTGWPyM7o3G1Az4oQfo8xPxbomdi1H',
+    socket: {
+        host: 'redis-15628.c326.us-east-1-3.ec2.redns.redis-cloud.com',
+        port: 15628
+    }
+});
+
+redisClient.connect();
 
 export async function POST() {
   try {
     // Попробуем получить данные из кэша
-    const cachedUsers = cache.get('leaderboard');
-
-    if (cachedUsers) {
-      console.log(1)
-      return NextResponse.json({ users: cachedUsers });
+    const cachedData = await redisClient.get('leaderboardData');
+    
+    // Если данные в кэше существуют, возвращаем их
+    if (cachedData) {
+      return NextResponse.json(JSON.parse(cachedData));
     }
 
-    // Если данных нет в кэше, подключаемся к базе данных
+    // Если данных в кэше нет, подключаемся к базе данных
     const { database } = await connectToDatabase();
 
     // Получаем данные из базы данных
@@ -26,8 +33,8 @@ export async function POST() {
       .limit(20) // Ограничиваем список до топ-20 пользователей
       .toArray();
 
-    // Сохраняем данные в кэш на 60 секунд
-    cache.set('leaderboard', users);
+    // Кэшируем полученные данные на 1 минуту
+    await redisClient.setEx('leaderboardData', 60, JSON.stringify({ users }));
 
     // Возвращаем данные пользователям
     return NextResponse.json({ users });

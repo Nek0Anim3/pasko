@@ -15,7 +15,6 @@ const Leaderboard = () => {
 
   // Функция для получения данных раз в 10 секунд
   const fetchData = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch("/api/user/getall", { method: "POST" });
       if (!response.ok) throw new Error("Error fetching leaderboard data.");
