@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'; // Используем NextResponse
 import { connectToDatabase } from '@/src/lib/db'; // Подключение к MongoDB клиенту
 
-export async function GET() {
+export async function POST() {
   try {
     // Подключение к базе данных
     const { database } = await connectToDatabase();

@@ -7,13 +7,6 @@ import abbreviateNumber from '@/src/utils/abbreviateNumber';
 import useUserStore from '@/src/Store/userStore';
 import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/LeaderboardUserCard';
 
-// Функция для получения данных
-const fetcher = async (url) => {
-  console.log("Fetching data from", url);
-  const res = await fetch(url);
-  return res.json();
-};
-
 const Leaderboard = () => {
   const { userData, photoUrl } = useUserStore();
   const [data, setData] = useState(null);
@@ -24,7 +17,9 @@ const Leaderboard = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const result = await fetcher("/api/user/getall");
+      const response = await fetch("/api/user/getall", { method: "POST" });
+      if (!response.ok) throw new Error("Error fetching leaderboard data.");
+      const result = await response.json(); // Преобразуем ответ в JSON
       setData(result);
       setError(null);
     } catch (err) {
@@ -67,7 +62,7 @@ const Leaderboard = () => {
               borderRadius: '50%',
               backgroundColor: '#ccc',
             }}
-          /> 
+          />
         )}
 
         <div className={styles.userLeaderboard}>
@@ -82,12 +77,16 @@ const Leaderboard = () => {
       </div>
 
       <div className={styles.leaderboard}>
-        {data.users.map((user, index) => (
-          <div key={user.uid} style={{ width: "100%" }}>
-            <LeaderboardUserCard user={user} index={index} />
-            <div className={styles.divider}></div>
-          </div>
-        ))}
+        {data?.users?.length > 0 ? (
+          data.users.map((user, index) => (
+            <div key={user.uid} style={{ width: "100%" }}>
+              <LeaderboardUserCard user={user} index={index} />
+              <div className={styles.divider}></div>
+            </div>
+          ))
+        ) : (
+          <p>No users found</p>
+        )}
       </div>
     </div>
   );
