@@ -34,7 +34,7 @@ export async function POST() {
       .toArray();
 
     // Кэшируем полученные данные на 1 минуту
-    await redisClient.setEx('leaderboardData', 60, JSON.stringify({ users }));
+    await redisClient.setEx('leaderboardData', 1800, JSON.stringify({ users }));
 
     // Возвращаем данные пользователям
     return NextResponse.json({ users });
