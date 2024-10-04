@@ -32,7 +32,7 @@ const Leaderboard = () => {
     fetchData(); // Загружаем данные при загрузке компонента
     const interval = setInterval(() => {
       fetchData(); // Обновляем данные каждые 10 секунд
-    }, 10000);
+    }, 60000);
 
     return () => clearInterval(interval); // Очищаем интервал при размонтировании компонента
   }, []);
