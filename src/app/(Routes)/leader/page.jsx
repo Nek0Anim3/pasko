@@ -8,17 +8,17 @@ import LeaderboardUserCard from '@/src/Components/ui/LeaderboardUserCard/Leaderb
 import useSWR from 'swr';
 
 // Функция для получения данных
-const fetcher = (url) => fetch(url).then(res => res.json());
+const fetcher = async (url) => {
+  console.log("Fetching data from", url); // Добавляем лог
+  const res = await fetch(url);
+  return res.json();
+};
 
 const Leaderboard = () => {
   const { userData, photoUrl } = useUserStore();
 
   // Используем SWR для получения данных. Данные обновляются только при заходе на страницу
-  const { data, error, isLoading } = useSWR("/api/user/getall", fetcher, {
-    refreshInterval: 1800000, // Обновление данных каждые 30 минут
-    revalidateOnFocus: true,  // Перезагрузка при возвращении на вкладку
-    revalidateOnMount: true,  // Перезапрос данных при загрузке страницы
-  });
+  const { data, error, isLoading } = useSWR("/api/user/getall", fetcher);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading leaderboard.</div>;
