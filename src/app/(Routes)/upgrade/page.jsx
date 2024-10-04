@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react';
+import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -40,11 +40,27 @@ function a11yProps(index) {
 
 const Upgrades = () => {
     
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [upgrades, setUpgrades] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    // Берём обновления с БД
+    const fetchUpgrades = async () => {
+      let res = await fetch('/api/upgrade/getall', { method: 'POST' });
+      let result = await res.json();
+      console.log(result)
+      // Фильтруем улучшения по категории 1
+      const filteredUpgrades = result.upgrades.filter(upgrade => upgrade.category === 1);
+      setUpgrades(filteredUpgrades);
+    };
+
+    fetchUpgrades();
+  }, []);
+
 
   return (
     <div className={`upgradeContent ${styles.upgradesPageContainer}`}>
@@ -64,18 +80,15 @@ const Upgrades = () => {
         </Box>
         <CustomTabPanel value={value} index={0} className={styles.tabOne}>
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 3 }} paddingBottom={6} className={styles.grid} >
-            <Grid size={6}>
-              <UpgradeCard img={'./upgrades/tap.png'} title={'+Тап'} desc={'+338 / клик'} /*И еще тут buttonClick={действие} есть*//> 
-            </Grid>
-            <Grid size={6}>
-              <UpgradeCard img={'./upgrades/afk.png'} title={'АФК'} desc={'+434 / ч'}/>
-            </Grid>
-            <Grid size={6}>
-              <UpgradeCard img={'./upgrades/energy.png'} title={'Энергия'} desc={'+100 ⚡'}/>
-            </Grid>
-            <Grid size={6}>
-              <UpgradeCard img={'./upgrades/energyregen.png'} title={'+Восст.'} desc={'+130 ⚡/ сек'}/>
-            </Grid>
+            {upgrades.length > 0 ? (
+              upgrades.map((upgrade, index) => (
+                <Grid key={index} size={6}>
+                  <UpgradeCard img={upgrade.image} title={upgrade.name} desc={upgrade.description} />
+                </Grid>
+              ))
+            ) : (
+              <p>No upgrades available</p>
+            )}
           </Grid>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>

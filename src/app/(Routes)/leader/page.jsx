@@ -72,13 +72,13 @@ const Leaderboard = () => {
           </p>
         </div>
 
-        <p>#1</p> {/* Display current user's position */}
+        
       </div>
 
       <div className={styles.leaderboard}>
         {data?.users?.length > 0 ? (
           data.users.map((user, index) => (
-            <div key={user.uid} style={{ width: "100%" }}>
+            <div key={user.uid} style={{ width: "100%", display: 'flex', alignItems: "center", flexDirection: 'column' }}>
               <LeaderboardUserCard user={user} index={index} />
               <div className={styles.divider}></div>
             </div>
