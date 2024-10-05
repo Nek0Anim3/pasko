@@ -13,8 +13,6 @@ export async function POST(req) {
       .sort({ category: 1 }) // Сортируем по категориям по возрастанию и по количеству очков по убыванию
       .toArray();
 
-    console.log(upgrades)
-
     // Возвращаем данные пользователям
     return NextResponse.json({ upgrades });
   } catch (error) {

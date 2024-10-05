@@ -58,7 +58,7 @@ const Header = () => {
 
   useEffect(() => {
     const timeline = gsap.timeline()
-    if(pathname == "/upgrade" || pathname == "/leader") {
+    if(pathname != "/") {
       timeline.to("header", {y: -300, duration: 0.5})
     } else if (pathname == "/") {
       timeline.to("header", {y: 0, duration: 0.5})

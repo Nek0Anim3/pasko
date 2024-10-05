@@ -77,7 +77,7 @@ const Footer = () => {
   return (
     <footer style={{ bottom: '-50px' }}>
       <nav className={styles.footerContainer}>
-        <div onClick={() => navigateWithDelay("/upgrade")}>
+        <div onClick={() => navigateWithDelay("/upgrade/main")}>
           <button 
             ref={(el) => (buttonRefs.current[0] = el)}
             className={`${styles.footerButton} ${activeButton === 1 ? styles.active : ''}`}

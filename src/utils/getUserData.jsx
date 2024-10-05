@@ -29,14 +29,14 @@ export const getUserData = async () => {
 // Запрос на получение данных пользователя
 async function DbFetch(initData) {
   const [dbResponse, avatarResponse] = await Promise.all([
-    fetch("api/user/check", {
+    fetch("/api/user/check", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ uid: initData.user.id, username: initData.user.username }),
     }),
-    fetch("api/avatar", {
+    fetch("/api/avatar", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

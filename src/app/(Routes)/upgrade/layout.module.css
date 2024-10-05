@@ -1,0 +1,66 @@
+.upgradesPageContainer{
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  border-radius: 50px;
+  display: flex;
+  z-index: 0;
+  padding: 20px;
+  position: absolute;
+  flex-direction: column;
+  font-weight: lighter;
+}
+
+.itemBox {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+}
+
+.navigation{
+  width: 100%;
+  background-color: #1b1919;
+  padding: 5px;
+  border-radius: 15px;
+  gap: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.active {
+  background-color: #524c4c;
+}
+
+.upgrLink {
+  padding: 15px;
+  border-radius: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+
+.title{
+  font-family: "Monument";
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.userMoney {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.coinImage {
+  width: auto;
+  height: 100%; /* Устанавливаем высоту равной высоте контейнера */
+  object-fit: contain; /* Сохраняет соотношение сторон изображения */
+}
