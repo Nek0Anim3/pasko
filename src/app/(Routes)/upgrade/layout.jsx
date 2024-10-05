@@ -5,7 +5,7 @@
 import Link from 'next/link';
 import styles from './layout.module.css'
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useUpgradesStore from '@/src/Store/upgradesStore';
 import Image from 'next/image';
 import useUserStore from '@/src/Store/userStore';
@@ -43,6 +43,7 @@ export default function Layout({ children }) {
           alt="PaskoCoin" 
           width={200} 
           height={200}
+          quality={100}
           className={styles.coinImage} 
         />
         <p>{abbreviateNumber(userData?.user?.points).value} {abbreviateNumber(userData?.user?.points).suffix}</p>
@@ -52,8 +53,8 @@ export default function Layout({ children }) {
       <div style={{ width: '100%' }}>
         <div className={styles.itemBox}>
           <nav className={styles.navigation}>
-            <Link href="/upgrade/main" className={`${(pathname == "/upgrade/main" && styles.active)} ${styles.upgrLink}`}>Main</Link>
-            <Link href="/upgrade/courses" className={`${(pathname == "/upgrade/courses" && styles.active)} ${styles.upgrLink}`}>Courses</Link>
+            <Link href="/upgrade/main" className={`${(pathname == "/upgrade/main" && styles.active)} ${styles.upgrLink}`}><div>Main</div></Link>
+            <Link href="/upgrade/courses" className={`${(pathname == "/upgrade/courses" ? styles.active : null)} ${styles.upgrLink}`}>Courses</Link>
             <Link href="/upgrade/office" className={`${(pathname == "/upgrade/office" && styles.active)} ${styles.upgrLink}`}>Office</Link>
           </nav>
         </div>

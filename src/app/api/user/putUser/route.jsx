@@ -24,37 +24,49 @@ export async function PUT(req) {
 
     let isLvlCorrect = false;
     let newLvl = user.level + 1;
-    // Логика проверки и обновления уровня
+    let newPointsPerTap = user.pointsPerTap + newLvl*2
+
+   // Логика проверки и обновления уровня
     if (maxPoints !== undefined && level !== undefined) {
       const nextLevelPoints = calculateNextLevelPoints(user.level);
-      
+    
       // Проверяем, что текущие очки >= требуемым для следующего уровня
       if (maxPoints >= nextLevelPoints) {
         isLvlCorrect = true;
       }
     }
 
+    // Вычисляем новое количество очков за тап только если уровень корректен
+    if (isLvlCorrect) {
+      newPointsPerTap = user.pointsPerTap + (user.level + 1) * 2;
+    }
+
     // Обновляем только те поля, которые были переданы
     updatedUser = {
       ...(points !== undefined && { points }),
       ...(maxPoints !== undefined && { maxPoints }),
-      ...(pointsPerTap !== undefined && { pointsPerTap }),
+      ...(isLvlCorrect && { pointsPerTap: newPointsPerTap }), // Здесь проверяем isLvlCorrect
       ...(income !== undefined && { income }),
-      ...(level !== undefined && isLvlCorrect && {level: newLvl}),
+      ...(isLvlCorrect && { level: user.level + 1 }), // Обновляем уровень, если он корректен
       ...(friendsInvited !== undefined && { friendsInvited }),
       ...(upgrades !== undefined && { upgrades }),
     };
 
-    console.log(updatedUser)
+    // Выводим в консоль для отладки
+    console.log(updatedUser);
 
     // Обновляем данные пользователя в базе данных
-    await database.collection("users").updateOne(
+    const result = await database.collection("users").updateOne(
       { uid }, 
       { $set: updatedUser }
     );
 
-    return NextResponse.json({ user: updatedUser });
+    // Проверяем, обновились ли данные
+    if (result.modifiedCount === 0) {
+      console.error('User data not updated:', uid);
+    }
 
+    return NextResponse.json({ user: updatedUser });
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Failed to update user' }, { status: 500 });
