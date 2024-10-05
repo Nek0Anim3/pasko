@@ -10,15 +10,15 @@ import Typography from '@mui/material/Typography';
 
 export default function UpgradeCard({ img, title, desc, buttonClick }) {
   return (
-    <Card sx={{ maxWidth: 345, backgroundColor: "#181818", color: "#fff", borderRadius: "20px" }}>
+    <Card sx={{ backgroundColor: "#181818", color: "#fff", borderRadius: "20px" }}>
       <CardMedia
         component="img"
         alt={title || "Image"}
-        height="140"
+        height="120"
         image={img || "/noupgrade.png"}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{color: "#fff"}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{color: "#fff", textWrap: "nowrap"}}>
           {title || "Default Title"}
         </Typography>
         <Typography variant="body2" sx={{ color: "#fff" }}>
